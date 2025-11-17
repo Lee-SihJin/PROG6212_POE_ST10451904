@@ -1,0 +1,1057 @@
+-- =============================================
+-- COMPLETE DATABASE DROP SCRIPT
+-- Drops all tables, sequences, triggers and indexes
+-- =============================================
+
+SET SERVEROUTPUT ON;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Starting database cleanup...');
+END;
+/
+
+-- =============================================
+-- 1. DROP ALL TABLES (in reverse dependency order)
+-- =============================================
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Dropping tables...');
+END;
+/
+
+-- Drop application tables first (with dependencies)
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE SUPPORTING_DOCUMENTS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped SUPPORTING_DOCUMENTS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping SUPPORTING_DOCUMENTS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('SUPPORTING_DOCUMENTS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE CLAIM_ITEMS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped CLAIM_ITEMS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping CLAIM_ITEMS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('CLAIM_ITEMS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE MONTHLY_CLAIMS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped MONTHLY_CLAIMS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping MONTHLY_CLAIMS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('MONTHLY_CLAIMS does not exist');
+        END IF;
+END;
+/
+
+-- Drop Identity tables (with dependencies)
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE USER_TOKENS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped USER_TOKENS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping USER_TOKENS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('USER_TOKENS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE USER_LOGINS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped USER_LOGINS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping USER_LOGINS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('USER_LOGINS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE USER_ROLES CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped USER_ROLES');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping USER_ROLES: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('USER_ROLES does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE USER_CLAIMS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped USER_CLAIMS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping USER_CLAIMS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('USER_CLAIMS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE ROLE_CLAIMS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped ROLE_CLAIMS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping ROLE_CLAIMS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('ROLE_CLAIMS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE USERS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped USERS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping USERS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('USERS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE ROLES CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped ROLES');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping ROLES: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('ROLES does not exist');
+        END IF;
+END;
+/
+
+-- Drop base entity tables
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE LECTURERS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped LECTURERS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping LECTURERS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('LECTURERS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE PROGRAMME_COORDINATORS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped PROGRAMME_COORDINATORS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping PROGRAMME_COORDINATORS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('PROGRAMME_COORDINATORS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE ACADEMIC_MANAGERS CASCADE CONSTRAINTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped ACADEMIC_MANAGERS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping ACADEMIC_MANAGERS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('ACADEMIC_MANAGERS does not exist');
+        END IF;
+END;
+/
+
+-- =============================================
+-- 2. DROP ALL TRIGGERS
+-- =============================================
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Dropping triggers...');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TRIGGER TRG_LECTURERS_ID';
+    DBMS_OUTPUT.PUT_LINE('Dropped TRG_LECTURERS_ID');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -4080 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping TRG_LECTURERS_ID: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('TRG_LECTURERS_ID does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TRIGGER TRG_COORDINATORS_ID';
+    DBMS_OUTPUT.PUT_LINE('Dropped TRG_COORDINATORS_ID');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -4080 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping TRG_COORDINATORS_ID: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('TRG_COORDINATORS_ID does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TRIGGER TRG_MANAGERS_ID';
+    DBMS_OUTPUT.PUT_LINE('Dropped TRG_MANAGERS_ID');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -4080 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping TRG_MANAGERS_ID: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('TRG_MANAGERS_ID does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TRIGGER TRG_MONTHLY_CLAIMS_ID';
+    DBMS_OUTPUT.PUT_LINE('Dropped TRG_MONTHLY_CLAIMS_ID');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -4080 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping TRG_MONTHLY_CLAIMS_ID: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('TRG_MONTHLY_CLAIMS_ID does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TRIGGER TRG_CLAIM_ITEMS_ID';
+    DBMS_OUTPUT.PUT_LINE('Dropped TRG_CLAIM_ITEMS_ID');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -4080 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping TRG_CLAIM_ITEMS_ID: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('TRG_CLAIM_ITEMS_ID does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TRIGGER TRG_SUPPORTING_DOCS_ID';
+    DBMS_OUTPUT.PUT_LINE('Dropped TRG_SUPPORTING_DOCS_ID');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -4080 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping TRG_SUPPORTING_DOCS_ID: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('TRG_SUPPORTING_DOCS_ID does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TRIGGER TRG_USERS_ID';
+    DBMS_OUTPUT.PUT_LINE('Dropped TRG_USERS_ID');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -4080 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping TRG_USERS_ID: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('TRG_USERS_ID does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TRIGGER TRG_ROLES_ID';
+    DBMS_OUTPUT.PUT_LINE('Dropped TRG_ROLES_ID');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -4080 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping TRG_ROLES_ID: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('TRG_ROLES_ID does not exist');
+        END IF;
+END;
+/
+
+-- =============================================
+-- 3. DROP ALL SEQUENCES
+-- =============================================
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Dropping sequences...');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_LECTURERS';
+    DBMS_OUTPUT.PUT_LINE('Dropped SEQ_LECTURERS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping SEQ_LECTURERS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('SEQ_LECTURERS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_PROGRAMME_COORDINATORS';
+    DBMS_OUTPUT.PUT_LINE('Dropped SEQ_PROGRAMME_COORDINATORS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping SEQ_PROGRAMME_COORDINATORS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('SEQ_PROGRAMME_COORDINATORS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_ACADEMIC_MANAGERS';
+    DBMS_OUTPUT.PUT_LINE('Dropped SEQ_ACADEMIC_MANAGERS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping SEQ_ACADEMIC_MANAGERS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('SEQ_ACADEMIC_MANAGERS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_MONTHLY_CLAIMS';
+    DBMS_OUTPUT.PUT_LINE('Dropped SEQ_MONTHLY_CLAIMS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping SEQ_MONTHLY_CLAIMS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('SEQ_MONTHLY_CLAIMS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_CLAIM_ITEMS';
+    DBMS_OUTPUT.PUT_LINE('Dropped SEQ_CLAIM_ITEMS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping SEQ_CLAIM_ITEMS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('SEQ_CLAIM_ITEMS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_SUPPORTING_DOCUMENTS';
+    DBMS_OUTPUT.PUT_LINE('Dropped SEQ_SUPPORTING_DOCUMENTS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping SEQ_SUPPORTING_DOCUMENTS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('SEQ_SUPPORTING_DOCUMENTS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_USERS';
+    DBMS_OUTPUT.PUT_LINE('Dropped SEQ_USERS');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping SEQ_USERS: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('SEQ_USERS does not exist');
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_ROLES';
+    DBMS_OUTPUT.PUT_LINE('Dropped SEQ_ROLES');
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE != -2289 THEN
+            DBMS_OUTPUT.PUT_LINE('Error dropping SEQ_ROLES: ' || SQLERRM);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('SEQ_ROLES does not exist');
+        END IF;
+END;
+/
+
+-- =============================================
+-- 4. DROP ALL INDEXES (if they still exist)
+-- =============================================
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Dropping indexes...');
+END;
+/
+
+DECLARE
+    index_count NUMBER := 0;
+BEGIN
+    -- Drop indexes for LECTURERS
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_LECTURERS_EMAIL';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_LECTURERS_EMAIL');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_LECTURERS_EMAIL: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_LECTURERS_EMP_NUM';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_LECTURERS_EMP_NUM');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_LECTURERS_EMP_NUM: ' || SQLERRM);
+            END IF;
+    END;
+
+    -- Drop indexes for PROGRAMME_COORDINATORS
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_COORDINATORS_EMAIL';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_COORDINATORS_EMAIL');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_COORDINATORS_EMAIL: ' || SQLERRM);
+            END IF;
+    END;
+
+    -- Drop indexes for ACADEMIC_MANAGERS
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_MANAGERS_EMAIL';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_MANAGERS_EMAIL');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_MANAGERS_EMAIL: ' || SQLERRM);
+            END IF;
+    END;
+
+    -- Drop indexes for MONTHLY_CLAIMS
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_MONTHLY_CLAIMS_LECTURER';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_MONTHLY_CLAIMS_LECTURER');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_MONTHLY_CLAIMS_LECTURER: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_MONTHLY_CLAIMS_COORDINATOR';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_MONTHLY_CLAIMS_COORDINATOR');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_MONTHLY_CLAIMS_COORDINATOR: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_MONTHLY_CLAIMS_MANAGER';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_MONTHLY_CLAIMS_MANAGER');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_MONTHLY_CLAIMS_MANAGER: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_MONTHLY_CLAIMS_STATUS';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_MONTHLY_CLAIMS_STATUS');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_MONTHLY_CLAIMS_STATUS: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_MONTHLY_CLAIMS_MONTH';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_MONTHLY_CLAIMS_MONTH');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_MONTHLY_CLAIMS_MONTH: ' || SQLERRM);
+            END IF;
+    END;
+
+    -- Drop indexes for CLAIM_ITEMS
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_CLAIM_ITEMS_CLAIM';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_CLAIM_ITEMS_CLAIM');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_CLAIM_ITEMS_CLAIM: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_CLAIM_ITEMS_WORKDATE';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_CLAIM_ITEMS_WORKDATE');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_CLAIM_ITEMS_WORKDATE: ' || SQLERRM);
+            END IF;
+    END;
+
+    -- Drop indexes for SUPPORTING_DOCUMENTS
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_SUPPORTING_DOCS_CLAIM';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_SUPPORTING_DOCS_CLAIM');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_SUPPORTING_DOCS_CLAIM: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_SUPPORTING_DOCS_TYPE';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_SUPPORTING_DOCS_TYPE');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_SUPPORTING_DOCS_TYPE: ' || SQLERRM);
+            END IF;
+    END;
+
+    -- Drop indexes for USERS
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_USERS_TYPE';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_USERS_TYPE');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_USERS_TYPE: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_USERS_LECTURER';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_USERS_LECTURER');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_USERS_LECTURER: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_USERS_COORDINATOR';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_USERS_COORDINATOR');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_USERS_COORDINATOR: ' || SQLERRM);
+            END IF;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX IX_USERS_MANAGER';
+        DBMS_OUTPUT.PUT_LINE('Dropped IX_USERS_MANAGER');
+        index_count := index_count + 1;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -1418 THEN
+                DBMS_OUTPUT.PUT_LINE('Error dropping IX_USERS_MANAGER: ' || SQLERRM);
+            END IF;
+    END;
+
+    DBMS_OUTPUT.PUT_LINE('Dropped ' || index_count || ' indexes');
+END;
+/
+
+-- =============================================
+-- 5. CLEANUP COMPLETE
+-- =============================================
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('=================================');
+    DBMS_OUTPUT.PUT_LINE('Database cleanup completed!');
+    DBMS_OUTPUT.PUT_LINE('All tables, sequences, triggers, and indexes have been removed.');
+    DBMS_OUTPUT.PUT_LINE('=================================');
+END;
+/
+-- Create Sequences for all tables with identity columns
+CREATE SEQUENCE SEQ_LECTURERS START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE SEQ_PROGRAMME_COORDINATORS START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE SEQ_ACADEMIC_MANAGERS START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE SEQ_MONTHLY_CLAIMS START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE SEQ_CLAIM_ITEMS START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE SEQ_SUPPORTING_DOCUMENTS START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE SEQ_USERS START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE SEQ_ROLES START WITH 1 INCREMENT BY 1;
+
+-- Create Identity Tables (ASP.NET Core Identity)
+CREATE TABLE ROLES (
+    "Id" NUMBER(10) PRIMARY KEY,
+    "Name" NVARCHAR2(256),
+    "NormalizedName" NVARCHAR2(256),
+    "ConcurrencyStamp" NCLOB
+);
+
+CREATE TABLE USERS (
+    "Id" NUMBER(10) PRIMARY KEY,
+    "UserName" NVARCHAR2(256),
+    "NormalizedUserName" NVARCHAR2(256),
+    "Email" NVARCHAR2(256),
+    "NormalizedEmail" NVARCHAR2(256),
+    "EmailConfirmed" NUMBER(1) NOT NULL,
+    "PasswordHash" NCLOB,
+    "SecurityStamp" NCLOB,
+    "ConcurrencyStamp" NCLOB,
+    "PhoneNumber" NCLOB,
+    "PhoneNumberConfirmed" NUMBER(1) NOT NULL,
+    "TwoFactorEnabled" NUMBER(1) NOT NULL,
+    "LockoutEnd" TIMESTAMP WITH TIME ZONE,
+    "LockoutEnabled" NUMBER(1) NOT NULL,
+    "AccessFailedCount" NUMBER(10) NOT NULL,
+    "FirstName" NVARCHAR2(100) NOT NULL,
+    "LastName" NVARCHAR2(100) NOT NULL,
+    "User_Type" NUMBER(10) NOT NULL,
+    "LecturerId" NUMBER(10),
+    "CoordinatorId" NUMBER(10),
+    "ManagerId" NUMBER(10),
+    "CreatedDate" TIMESTAMP NOT NULL,
+    "IsActive" NUMBER(1) DEFAULT 1 NOT NULL
+);
+
+CREATE TABLE USER_ROLES (
+    "UserId" NUMBER(10) NOT NULL,
+    "RoleId" NUMBER(10) NOT NULL,
+    PRIMARY KEY ("UserId", "RoleId")
+);
+
+CREATE TABLE USER_CLAIMS (
+    "Id" NUMBER(10) PRIMARY KEY,
+    "UserId" NUMBER(10) NOT NULL,
+    "ClaimType" NCLOB,
+    "ClaimValue" NCLOB
+);
+
+CREATE TABLE USER_LOGINS (
+    "LoginProvider" NVARCHAR2(128) NOT NULL,
+    "ProviderKey" NVARCHAR2(128) NOT NULL,
+    "ProviderDisplayName" NCLOB,
+    "UserId" NUMBER(10) NOT NULL,
+    PRIMARY KEY ("LoginProvider", "ProviderKey")
+);
+
+CREATE TABLE USER_TOKENS (
+    "UserId" NUMBER(10) NOT NULL,
+    "LoginProvider" NVARCHAR2(128) NOT NULL,
+    "Name" NVARCHAR2(128) NOT NULL,
+    "Value" NCLOB,
+    PRIMARY KEY ("UserId", "LoginProvider", "Name")
+);
+
+CREATE TABLE ROLE_CLAIMS (
+    "Id" NUMBER(10) PRIMARY KEY,
+    "RoleId" NUMBER(10) NOT NULL,
+    "ClaimType" NCLOB,
+    "ClaimValue" NCLOB
+);
+
+-- Create Application Tables
+CREATE TABLE LECTURERS (
+    LecturerId NUMBER(10) PRIMARY KEY,
+    FirstName NVARCHAR2(100) NOT NULL,
+    LastName NVARCHAR2(100) NOT NULL,
+    Email NVARCHAR2(256) NOT NULL,
+    EmployeeNumber NVARCHAR2(20) NOT NULL,
+    PhoneNumber NVARCHAR2(15),
+    HourlyRate NUMBER(10,2),
+    ContractStartDate TIMESTAMP,
+    ContractEndDate TIMESTAMP,
+    IsActive NUMBER(1) DEFAULT 1
+);
+
+CREATE TABLE PROGRAMME_COORDINATORS (
+    COORDINATOR_ID NUMBER(10) PRIMARY KEY,
+    FIRST_NAME NVARCHAR2(100) NOT NULL,
+    LAST_NAME NVARCHAR2(100) NOT NULL,
+    EMAIL NVARCHAR2(256) NOT NULL,
+    DEPARTMENT NVARCHAR2(100) NOT NULL,
+    IS_ACTIVE NUMBER(1) DEFAULT 1
+);
+
+CREATE TABLE ACADEMIC_MANAGERS (
+    MANAGER_ID NUMBER(10) PRIMARY KEY,
+    FIRST_NAME NVARCHAR2(100) NOT NULL,
+    LAST_NAME NVARCHAR2(100) NOT NULL,
+    EMAIL NVARCHAR2(256) NOT NULL,
+    IS_ACTIVE NUMBER(1) DEFAULT 1
+);
+
+CREATE TABLE MONTHLY_CLAIMS (
+    CLAIM_ID NUMBER(10) PRIMARY KEY,
+    LECTURER_ID NUMBER(10) NOT NULL,
+    CLAIM_MONTH TIMESTAMP NOT NULL,
+    SUBMISSION_DATE TIMESTAMP NOT NULL,
+    COORDINATOR_REVIEW_DATE TIMESTAMP,
+    MANAGER_REVIEW_DATE TIMESTAMP,
+    COORDINATOR_APPROVAL_DATE TIMESTAMP,
+    MANAGER_APPROVAL_DATE TIMESTAMP,
+    PAYMENT_DATE TIMESTAMP,
+    TOTAL_HOURS NUMBER(8,2) DEFAULT 0,
+    TOTAL_AMOUNT NUMBER(10,2) DEFAULT 0,
+    STATUS NUMBER(10) NOT NULL,
+    COORDINATOR_COMMENTS NVARCHAR2(500),
+    MANAGER_COMMENTS NVARCHAR2(500),
+    COORDINATOR_ID NUMBER(10),
+    MANAGER_ID NUMBER(10),
+    FOREIGN KEY (LECTURER_ID) REFERENCES LECTURERS(LecturerId),
+    FOREIGN KEY (COORDINATOR_ID) REFERENCES PROGRAMME_COORDINATORS(COORDINATOR_ID),
+    FOREIGN KEY (MANAGER_ID) REFERENCES ACADEMIC_MANAGERS(MANAGER_ID)
+);
+
+CREATE TABLE CLAIM_ITEMS (
+    ITEM_ID NUMBER(10) PRIMARY KEY,
+    CLAIM_ID NUMBER(10) NOT NULL,
+    WORK_DATE TIMESTAMP NOT NULL,
+    DESCRIPTION NVARCHAR2(200) NOT NULL,
+    HOURS_WORKED NUMBER(4,2),
+    HOURLY_RATE NUMBER(10,2),
+    FOREIGN KEY (CLAIM_ID) REFERENCES MONTHLY_CLAIMS(CLAIM_ID) ON DELETE CASCADE
+);
+
+CREATE TABLE SUPPORTING_DOCUMENTS (
+    DOCUMENT_ID NUMBER(10) PRIMARY KEY,
+    CLAIM_ID NUMBER(10) NOT NULL,
+    FILE_NAME NVARCHAR2(255) NOT NULL,
+    ORIGINAL_FILE_NAME NVARCHAR2(100) NOT NULL,
+    DOCUMENT_TYPE NUMBER(10) NOT NULL,
+    FILE_DATA BLOB,
+    FILE_SIZE NUMBER(10) NOT NULL,
+    CONTENT_TYPE NVARCHAR2(100) NOT NULL,
+    UPLOAD_DATE TIMESTAMP NOT NULL,
+    DESCRIPTION NVARCHAR2(500),
+    FOREIGN KEY (CLAIM_ID) REFERENCES MONTHLY_CLAIMS(CLAIM_ID) ON DELETE CASCADE
+);
+
+-- Create Indexes
+CREATE UNIQUE INDEX IX_LECTURERS_EMAIL ON LECTURERS(Email);
+CREATE UNIQUE INDEX IX_LECTURERS_EMP_NUM ON LECTURERS(EmployeeNumber);
+
+CREATE UNIQUE INDEX IX_COORDINATORS_EMAIL ON PROGRAMME_COORDINATORS(EMAIL);
+
+CREATE UNIQUE INDEX IX_MANAGERS_EMAIL ON ACADEMIC_MANAGERS(EMAIL);
+
+CREATE INDEX IX_MONTHLY_CLAIMS_LECTURER ON MONTHLY_CLAIMS(LECTURER_ID);
+CREATE INDEX IX_MONTHLY_CLAIMS_COORDINATOR ON MONTHLY_CLAIMS(COORDINATOR_ID);
+CREATE INDEX IX_MONTHLY_CLAIMS_MANAGER ON MONTHLY_CLAIMS(MANAGER_ID);
+CREATE INDEX IX_MONTHLY_CLAIMS_STATUS ON MONTHLY_CLAIMS(STATUS);
+CREATE INDEX IX_MONTHLY_CLAIMS_MONTH ON MONTHLY_CLAIMS(CLAIM_MONTH);
+
+CREATE INDEX IX_CLAIM_ITEMS_CLAIM ON CLAIM_ITEMS(CLAIM_ID);
+CREATE INDEX IX_CLAIM_ITEMS_WORKDATE ON CLAIM_ITEMS(WORK_DATE);
+
+CREATE INDEX IX_SUPPORTING_DOCS_CLAIM ON SUPPORTING_DOCUMENTS(CLAIM_ID);
+CREATE INDEX IX_SUPPORTING_DOCS_TYPE ON SUPPORTING_DOCUMENTS(DOCUMENT_TYPE);
+
+CREATE INDEX IX_USERS_TYPE ON USERS("User_Type");
+CREATE INDEX IX_USERS_LECTURER ON USERS("LecturerId");
+CREATE INDEX IX_USERS_COORDINATOR ON USERS("CoordinatorId");
+CREATE INDEX IX_USERS_MANAGER ON USERS("ManagerId");
+-- Create Triggers for auto-incrementing IDs
+CREATE OR REPLACE TRIGGER TRG_LECTURERS_ID
+    BEFORE INSERT ON LECTURERS
+    FOR EACH ROW
+BEGIN
+    IF :NEW.LecturerId IS NULL THEN
+        SELECT SEQ_LECTURERS.NEXTVAL INTO :NEW.LecturerId FROM DUAL;
+    END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_COORDINATORS_ID
+    BEFORE INSERT ON PROGRAMME_COORDINATORS
+    FOR EACH ROW
+BEGIN
+    IF :NEW.COORDINATOR_ID IS NULL THEN
+        SELECT SEQ_PROGRAMME_COORDINATORS.NEXTVAL INTO :NEW.COORDINATOR_ID FROM DUAL;
+    END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_MANAGERS_ID
+    BEFORE INSERT ON ACADEMIC_MANAGERS
+    FOR EACH ROW
+BEGIN
+    IF :NEW.MANAGER_ID IS NULL THEN
+        SELECT SEQ_ACADEMIC_MANAGERS.NEXTVAL INTO :NEW.MANAGER_ID FROM DUAL;
+    END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_MONTHLY_CLAIMS_ID
+    BEFORE INSERT ON MONTHLY_CLAIMS
+    FOR EACH ROW
+BEGIN
+    IF :NEW.CLAIM_ID IS NULL THEN
+        SELECT SEQ_MONTHLY_CLAIMS.NEXTVAL INTO :NEW.CLAIM_ID FROM DUAL;
+    END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_CLAIM_ITEMS_ID
+    BEFORE INSERT ON CLAIM_ITEMS
+    FOR EACH ROW
+BEGIN
+    IF :NEW.ITEM_ID IS NULL THEN
+        SELECT SEQ_CLAIM_ITEMS.NEXTVAL INTO :NEW.ITEM_ID FROM DUAL;
+    END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_SUPPORTING_DOCS_ID
+    BEFORE INSERT ON SUPPORTING_DOCUMENTS
+    FOR EACH ROW
+BEGIN
+    IF :NEW.DOCUMENT_ID IS NULL THEN
+        SELECT SEQ_SUPPORTING_DOCUMENTS.NEXTVAL INTO :NEW.DOCUMENT_ID FROM DUAL;
+    END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER TRG_USERS_ID
+    BEFORE INSERT ON USERS
+    FOR EACH ROW
+BEGIN
+    IF :NEW."Id" IS NULL THEN
+        SELECT SEQ_USERS.NEXTVAL INTO :NEW."Id" FROM DUAL;
+    END IF;
+END;
+/
+CREATE OR REPLACE TRIGGER TRG_ROLES_ID
+    BEFORE INSERT ON ROLES
+    FOR EACH ROW
+BEGIN
+    IF :NEW."Id" IS NULL THEN
+        SELECT SEQ_ROLES.NEXTVAL INTO :NEW."Id" FROM DUAL;
+    END IF;
+END;
+/
+
+
+
+
+
+
+
+
+
+--INSERT
+-- Insert roles into ROLES table
+INSERT INTO ROLES ("Id", "Name", "NormalizedName", "ConcurrencyStamp") VALUES
+(SEQ_ROLES.NEXTVAL, 'Administrator', 'ADMINISTRATOR', 'CONCSTAMP_ROLE_001');
+
+INSERT INTO ROLES ("Id", "Name", "NormalizedName", "ConcurrencyStamp") VALUES
+(SEQ_ROLES.NEXTVAL, 'Lecturer', 'LECTURER', 'CONCSTAMP_ROLE_002');
+
+INSERT INTO ROLES ("Id", "Name", "NormalizedName", "ConcurrencyStamp") VALUES
+(SEQ_ROLES.NEXTVAL, 'Coordinator', 'COORDINATOR', 'CONCSTAMP_ROLE_003');
+
+INSERT INTO ROLES ("Id", "Name", "NormalizedName", "ConcurrencyStamp") VALUES
+(SEQ_ROLES.NEXTVAL, 'Manager', 'MANAGER', 'CONCSTAMP_ROLE_004');
+
+COMMIT;
+--insert the base records in the specific tables
+INSERT INTO ACADEMIC_MANAGERS (MANAGER_ID, FIRST_NAME, LAST_NAME, EMAIL, IS_ACTIVE) 
+VALUES (SEQ_ACADEMIC_MANAGERS.NEXTVAL, 'John', 'Manager', 'john.manager@university.edu', 1);
+
+INSERT INTO PROGRAMME_COORDINATORS (COORDINATOR_ID, FIRST_NAME, LAST_NAME, EMAIL, DEPARTMENT, IS_ACTIVE) 
+VALUES (SEQ_PROGRAMME_COORDINATORS.NEXTVAL, 'Sarah', 'Coordinator', 'sarah.coordinator@university.edu', 'Computer Science', 1);
+
+-- Corrected INSERT for LECTURERS
+INSERT INTO LECTURERS (LECTURERID, FIRSTNAME, LASTNAME, EMAIL, EMPLOYEENUMBER, PHONENUMBER, HOURLYRATE, CONTRACTSTARTDATE, CONTRACTENDDATE, ISACTIVE) 
+VALUES (SEQ_LECTURERS.NEXTVAL, 'David', 'Lecturer', 'david.lecturer@university.edu', 'EMP001', '+1234567890', 75.50, SYSDATE, NULL, 1);
+
+-- insert the user accounts with correct Identity column names
+INSERT INTO USERS (
+    "Id", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", 
+    "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", 
+    "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", 
+    "LockoutEnabled", "AccessFailedCount", "FirstName", "LastName", 
+    "User_Type", "ManagerId", "CreatedDate", "IsActive"
+) VALUES (
+    SEQ_USERS.NEXTVAL,
+    'john.manager@university.edu',
+    'JOHN.MANAGER@UNIVERSITY.EDU',
+    'john.manager@university.edu',
+    'JOHN.MANAGER@UNIVERSITY.EDU',
+    1,
+    'AQAAAAIAAYagAAAAEFHfivmH8/WgRybuNef06fQe3i+V2Gin3yt1GYvQRudPQ03QT2QuPZIoP8ncePawdg==',
+    'SECSTAMP001',
+    'CONCSTAMP001',
+    NULL,
+    0,
+    0,
+    1,
+    0,
+    'John',
+    'Manager',
+    3,
+    1,
+    SYSDATE,
+    1
+);
+
+INSERT INTO USERS (
+    "Id", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", 
+    "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", 
+    "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", 
+    "LockoutEnabled", "AccessFailedCount", "FirstName", "LastName", 
+    "User_Type", "CoordinatorId", "CreatedDate", "IsActive"
+) VALUES (
+    SEQ_USERS.NEXTVAL,
+    'sarah.coordinator@university.edu',
+    'SARAH.COORDINATOR@UNIVERSITY.EDU',
+    'sarah.coordinator@university.edu',
+    'SARAH.COORDINATOR@UNIVERSITY.EDU',
+    1,
+    'AQAAAAIAAYagAAAAEFHfivmH8/WgRybuNef06fQe3i+V2Gin3yt1GYvQRudPQ03QT2QuPZIoP8ncePawdg==',
+    'SECSTAMP002',
+    'CONCSTAMP002',
+    NULL,
+    0,
+    0,
+    1,
+    0,
+    'Sarah',
+    'Coordinator',
+    2,
+    1,
+    SYSDATE,
+    1
+);
+
+INSERT INTO USERS (
+    "Id", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", 
+    "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", 
+    "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", 
+    "LockoutEnabled", "AccessFailedCount", "FirstName", "LastName", 
+    "User_Type", "LecturerId", "CreatedDate", "IsActive"
+) VALUES (
+    SEQ_USERS.NEXTVAL,
+    'david.lecturer@university.edu',
+    'DAVID.LECTURER@UNIVERSITY.EDU',
+    'david.lecturer@university.edu',
+    'DAVID.LECTURER@UNIVERSITY.EDU',
+    1,
+    'AQAAAAIAAYagAAAAEFHfivmH8/WgRybuNef06fQe3i+V2Gin3yt1GYvQRudPQ03QT2QuPZIoP8ncePawdg==',
+    'SECSTAMP003',
+    'CONCSTAMP003',
+    '+1234567890',
+    1,
+    0,
+    1,
+    0,
+    'David',
+    'Lecturer',
+    1,
+    1,
+    SYSDATE,
+    1
+);
+
+INSERT INTO USERS (
+    "Id", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", 
+    "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", 
+    "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", 
+    "LockoutEnabled", "AccessFailedCount", "FirstName", "LastName", 
+    "User_Type", "CreatedDate", "IsActive"
+) VALUES (
+    SEQ_USERS.NEXTVAL,
+    'admin@university.edu',
+    'ADMIN@UNIVERSITY.EDU',
+    'admin@university.edu',
+    'ADMIN@UNIVERSITY.EDU',
+    1,
+    'AQAAAAIAAYagAAAAEFHfivmH8/WgRybuNef06fQe3i+V2Gin3yt1GYvQRudPQ03QT2QuPZIoP8ncePawdg==',
+    'SECSTAMP001',
+    'CONCSTAMP001',
+    NULL,
+    0,
+    0,
+    1,
+    0,
+    'System',
+    'Administrator',
+    4,
+    SYSDATE,
+    1
+);
+
+-- Assign roles to users (make sure roles exist first)
+INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (1, 4); -- John Manager -> Administrator
+INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (2, 3); -- Sarah Coordinator -> Coordinator  
+INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (3, 2); -- David Lecturer -> Lecturer
+INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (4, 1); -- Admin -> Administrator
+
+COMMIT;
