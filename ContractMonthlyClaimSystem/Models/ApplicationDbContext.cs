@@ -63,42 +63,42 @@ namespace ContractMonthlyClaimSystem.Data
             {
                 entity.HasKey(l => l.LecturerId);
                 entity.Property(l => l.LecturerId)
-                    .HasColumnName("LecturerId")
+                    .HasColumnName("LECTURERID")
                     .ValueGeneratedOnAdd();
 
                 entity.Property(l => l.FirstName)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .HasColumnName("FirstName");
+                    .HasColumnName("FIRSTNAME");
 
                 entity.Property(l => l.LastName)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .HasColumnName("LastName");
+                    .HasColumnName("LASTNAME");
 
                 entity.Property(l => l.Email)
                     .IsRequired()
                     .HasMaxLength(256)
-                    .HasColumnName("Email");
+                    .HasColumnName("EMAIL");
 
                 entity.Property(l => l.EmployeeNumber)
                     .IsRequired()
                     .HasMaxLength(20)
-                    .HasColumnName("EmployeeNumber");
+                    .HasColumnName("EMPLOYEENUMBER");
 
                 entity.Property(l => l.PhoneNumber)
                     .HasMaxLength(15)
-                    .HasColumnName("PhoneNumber");
+                    .HasColumnName("PHONENUMBER");
 
                 entity.Property(l => l.HourlyRate)
                     .HasColumnType("NUMBER(10,2)")
-                    .HasColumnName("HourlyRate");
+                    .HasColumnName("HOURLYRATE");
 
                 entity.Property(l => l.ContractStartDate)
-                    .HasColumnName("ContractStartDate");
+                    .HasColumnName("CONTRACTSTARTDATE");
 
                 entity.Property(l => l.ContractEndDate)
-                    .HasColumnName("ContractEndDate");
+                    .HasColumnName("CONTRACTENDDATE");
 
                 // FIX: Use NUMBER(1) for boolean with proper conversion
                 entity.Property(l => l.IsActive)
@@ -107,7 +107,7 @@ namespace ContractMonthlyClaimSystem.Data
                     .HasConversion(
                         v => v ? 1 : 0,
                         v => v != 0)
-                    .HasColumnName("IsActive");
+                    .HasColumnName("ISACTIVE");
 
                 // Ignore computed property
                 entity.Ignore(l => l.FullName);
