@@ -103,7 +103,7 @@ namespace ContractMonthlyClaimSystem.Controllers
                         _ => User_Type.Administrator
                     },
                     EmailConfirmed = true,
-                    IsActive = true
+                    //IsActive = 1
                 };
 
                 var result = await userManager.CreateAsync(newUser, password);

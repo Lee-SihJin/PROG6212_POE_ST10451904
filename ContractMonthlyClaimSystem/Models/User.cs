@@ -36,7 +36,7 @@ namespace ContractMonthlyClaimSystem.Models
         public string FullName => $"{FirstName} {LastName}";
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public bool IsActive { get; set; } = true;
+        //public int IsActive { get; set; } 
     }
 
     public enum User_Type

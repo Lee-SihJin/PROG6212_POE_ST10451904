@@ -102,11 +102,6 @@ namespace ContractMonthlyClaimSystem.Data
 
                 // FIX: Use NUMBER(1) for boolean with proper conversion
                 entity.Property(l => l.IsActive)
-                    .HasColumnType("NUMBER(1)")
-                    .HasDefaultValue(true)
-                    .HasConversion(
-                        v => v ? 1 : 0,
-                        v => v != 0)
                     .HasColumnName("ISACTIVE");
 
                 // Ignore computed property
@@ -147,9 +142,6 @@ namespace ContractMonthlyClaimSystem.Data
                 entity.Property(pc => pc.IsActive)
                     .HasColumnType("NUMBER(1)")
                     .HasDefaultValue(true)
-                    .HasConversion(
-                        v => v ? 1 : 0,
-                        v => v != 0)
                     .HasColumnName("IS_ACTIVE");
 
                 // Ignore computed property
@@ -185,9 +177,6 @@ namespace ContractMonthlyClaimSystem.Data
                 entity.Property(am => am.IsActive)
                     .HasColumnType("NUMBER(1)")
                     .HasDefaultValue(true)
-                    .HasConversion(
-                        v => v ? 1 : 0,
-                        v => v != 0)
                     .HasColumnName("IS_ACTIVE");
 
                 // Ignore computed property
@@ -420,13 +409,10 @@ namespace ContractMonthlyClaimSystem.Data
                     .HasColumnName("CreatedDate");
 
                 // FIX: Use NUMBER(1) for boolean with proper conversion
-                entity.Property(u => u.IsActive)
-                    .HasColumnType("NUMBER(1)")
-                    .HasDefaultValue(true)
-                    .HasConversion(
-                        v => v ? 1 : 0,
-                        v => v != 0)
-                    .HasColumnName("IsActive");
+                //entity.Property(u => u.IsActive)
+                //    .HasColumnType("NUMBER(1)")
+                //    .HasDefaultValue(true)
+                //    .HasColumnName("IsActive");
 
                 // Relationships
                 entity.HasOne(u => u.Lecturer)

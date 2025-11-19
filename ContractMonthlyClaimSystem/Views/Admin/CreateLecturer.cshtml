@@ -1,0 +1,144 @@
+﻿@model ContractMonthlyClaimSystem.Models.ViewModels.CreateLecturerViewModel
+@{
+    ViewData["Title"] = "Add New Lecturer";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Add New Lecturer</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FirstName"></label>
+                                    <input asp-for="FirstName" class="form-control" />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="LastName"></label>
+                                    <input asp-for="LastName" class="form-control" />
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Email"></label>
+                                    <input asp-for="Email" class="form-control" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="EmployeeNumber"></label>
+                                    <input asp-for="EmployeeNumber" class="form-control" />
+                                    <span asp-validation-for="EmployeeNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="PhoneNumber"></label>
+                                    <input asp-for="PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="HourlyRate"></label>
+                                    <input asp-for="HourlyRate" class="form-control" />
+                                    <span asp-validation-for="HourlyRate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ContractStartDate"></label>
+                                    <input asp-for="ContractStartDate" type="date" class="form-control" />
+                                    <span asp-validation-for="ContractStartDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ContractEndDate"></label>
+                                    <input asp-for="ContractEndDate" type="date" class="form-control" />
+                                    <span asp-validation-for="ContractEndDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-check">
+                            <input asp-for="IsActive" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label"></label>
+                        </div>
+
+                        <hr />
+
+                        <div class="form-group form-check">
+                            <input asp-for="CreateUserAccount" class="form-check-input" id="createUserAccount" />
+                            <label asp-for="CreateUserAccount" class="form-check-label"></label>
+                        </div>
+
+                        <div id="userAccountFields" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="TemporaryPassword"></label>
+                                        <input asp-for="TemporaryPassword" class="form-control" />
+                                        <span asp-validation-for="TemporaryPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="ConfirmPassword"></label>
+                                        <input asp-for="ConfirmPassword" class="form-control" />
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Lecturer
+                            </button>
+                            <a href="@Url.Action("Lecturers")" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#createUserAccount').change(function () {
+                if (this.checked) {
+                    $('#userAccountFields').show();
+                } else {
+                    $('#userAccountFields').hide();
+                }
+            });
+
+            // Trigger change event on page load
+            $('#createUserAccount').trigger('change');
+        });
+    </script>
+}
