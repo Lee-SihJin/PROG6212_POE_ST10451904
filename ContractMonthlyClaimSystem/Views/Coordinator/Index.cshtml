@@ -134,8 +134,8 @@
                                             </td>
                                             <td>@claim.Lecturer?.EmployeeNumber</td>
                                             <td>@claim.DisplayMonth</td>
-                                            <td>@claim.TotalHours.ToString("N1")</td>
-                                            <td class="fw-bold text-success">R @claim.TotalAmount.ToString("N2")</td>
+                                            <td>@claim.TotalHours</td>
+                                            <td class="fw-bold text-success">R @claim.TotalAmount</td>
                                             <td>@claim.SubmissionDate.ToString("dd MMM yyyy")</td>
                                             <td>
                                                 @if (claim.SupportingDocuments?.Any() == true)
@@ -222,8 +222,8 @@
                                             <td>#@claim.ClaimId</td>
                                             <td>@claim.Lecturer?.FullName</td>
                                             <td>@claim.DisplayMonth</td>
-                                            <td>@claim.TotalHours.ToString("N1")</td>
-                                            <td>R @claim.TotalAmount.ToString("N2")</td>
+                                            <td>@claim.TotalHours</td>
+                                            <td>R @claim.TotalAmount</td>
                                             <td>
                                                 <span class="badge @GetStatusBadgeClass(claim.Status)">
                                                     @claim.Status

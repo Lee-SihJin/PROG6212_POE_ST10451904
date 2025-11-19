@@ -31,8 +31,8 @@ namespace ContractMonthlyClaimSystem.Models
         public DateTime? CoordinatorApprovalDate { get; set; }
         public DateTime? ManagerApprovalDate { get; set; }
         public DateTime? PaymentDate { get; set; }
-        public decimal TotalHours { get; set; }
-        public decimal TotalAmount { get; set; }
+        public decimal? TotalHours { get; set; }
+        public decimal? TotalAmount { get; set; }
 
         [Required]
         public ClaimStatus Status { get; set; } = ClaimStatus.Draft;

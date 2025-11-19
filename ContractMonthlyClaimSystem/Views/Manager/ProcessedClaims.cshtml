@@ -108,9 +108,9 @@
                                                 <small class="text-muted">@claim.Lecturer?.EmployeeNumber</small>
                                             </td>
                                             <td>@claim.DisplayMonth</td>
-                                            <td>@claim.TotalHours.ToString("N1")</td>
+                                            <td>@claim.TotalHours</td>
                                             <td class="fw-bold @(claim.Status == ClaimStatus.ManagerApproved ? "text-success" : "text-danger")">
-                                                R @claim.TotalAmount.ToString("N2")
+                                                R @claim.TotalAmount
                                             </td>
                                             <td>
                                                 @if (claim.Coordinator != null)
@@ -199,7 +199,7 @@
                             <div class="col-md-3">
                                 <div class="card bg-primary text-white">
                                     <div class="card-body text-center">
-                                        <h4>R @Model.Where(m => m.Status == ClaimStatus.ManagerApproved).Sum(m => m.TotalAmount).ToString("N0")</h4>
+                                        <h4>R @Model.Where(m => m.Status == ClaimStatus.ManagerApproved).Sum(m => m.TotalAmount)</h4>
                                         <p class="mb-0">Total Approved Amount</p>
                                     </div>
                                 </div>

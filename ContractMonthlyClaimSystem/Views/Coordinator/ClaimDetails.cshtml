@@ -60,7 +60,7 @@
                                 </tr>
                                 <tr>
                                     <th>Hourly Rate:</th>
-                                    <td>R @Model.Lecturer?.HourlyRate.ToString("N2")</td>
+                                    <td>R @Model.Lecturer?.HourlyRate</td>
                                 </tr>
                             </table>
                         </div>
@@ -76,11 +76,11 @@
                                 </tr>
                                 <tr>
                                     <th>Total Hours:</th>
-                                    <td>@Model.TotalHours.ToString("N1") hours</td>
+                                    <td>@Model.TotalHours hours</td>
                                 </tr>
                                 <tr>
                                     <th>Total Amount:</th>
-                                    <td class="fw-bold text-success">R @Model.TotalAmount.ToString("N2")</td>
+                                    <td class="fw-bold text-success">R @Model.TotalAmount</td>
                                 </tr>
                             </table>
                         </div>
@@ -215,15 +215,15 @@
                     <table class="table table-sm table-borderless">
                         <tr>
                             <td>Hours Claimed:</td>
-                            <td class="text-end fw-bold">@Model.TotalHours.ToString("N1")</td>
+                            <td class="text-end fw-bold">@Model.TotalHours</td>
                         </tr>
                         <tr>
                             <td>Hourly Rate:</td>
-                            <td class="text-end">R @Model.Lecturer?.HourlyRate.ToString("N2")</td>
+                            <td class="text-end">R @Model.Lecturer?.HourlyRate</td>
                         </tr>
                         <tr>
                             <td>Total Amount:</td>
-                            <td class="text-end fw-bold text-success">R @Model.TotalAmount.ToString("N2")</td>
+                            <td class="text-end fw-bold text-success">R @Model.TotalAmount</td>
                         </tr>
                         <tr>
                             <td>Documents:</td>
@@ -363,7 +363,7 @@
             currentClaimId = claimId;
             document.getElementById('approvalLecturerName').textContent = lecturerName;
             document.getElementById('approvalClaimMonth').textContent = `Claim for ${claimMonth}`;
-            document.getElementById('approvalAmount').textContent = 'R @Model.TotalAmount.ToString("N2")';
+            document.getElementById('approvalAmount').textContent = 'R @Model.TotalAmount';
             document.getElementById('approvalNotes').value = '';
 
             const modal = new bootstrap.Modal(document.getElementById('approvalModal'));
@@ -374,7 +374,7 @@
             currentClaimId = claimId;
             document.getElementById('rejectionLecturerName').textContent = lecturerName;
             document.getElementById('rejectionClaimMonth').textContent = `Claim for ${claimMonth}`;
-            document.getElementById('rejectionAmount').textContent = 'R @Model.TotalAmount.ToString("N2")';
+            document.getElementById('rejectionAmount').textContent = 'R @Model.TotalAmount';
             document.getElementById('rejectionReason').value = '';
 
             const modal = new bootstrap.Modal(document.getElementById('rejectionModal'));

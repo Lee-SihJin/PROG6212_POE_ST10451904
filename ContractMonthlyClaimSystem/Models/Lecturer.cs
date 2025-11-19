@@ -26,7 +26,7 @@ namespace ContractMonthlyClaimSystem.Models
         [StringLength(15)]
         public string PhoneNumber { get; set; }
 
-        public decimal HourlyRate { get; set; }
+        public decimal? HourlyRate { get; set; }
 
         public DateTime ContractStartDate { get; set; }
         public DateTime? ContractEndDate { get; set; }

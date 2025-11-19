@@ -140,8 +140,6 @@ namespace ContractMonthlyClaimSystem.Data
 
                 // FIX: Use NUMBER(1) for boolean with proper conversion
                 entity.Property(pc => pc.IsActive)
-                    .HasColumnType("NUMBER(1)")
-                    .HasDefaultValue(true)
                     .HasColumnName("IS_ACTIVE");
 
                 // Ignore computed property
@@ -175,8 +173,6 @@ namespace ContractMonthlyClaimSystem.Data
 
                 // FIX: Use NUMBER(1) for boolean with proper conversion
                 entity.Property(am => am.IsActive)
-                    .HasColumnType("NUMBER(1)")
-                    .HasDefaultValue(true)
                     .HasColumnName("IS_ACTIVE");
 
                 // Ignore computed property
@@ -221,13 +217,9 @@ namespace ContractMonthlyClaimSystem.Data
                     .HasColumnName("PAYMENT_DATE");
 
                 entity.Property(mc => mc.TotalHours)
-                    .HasColumnType("NUMBER(8,2)")
-                    .HasDefaultValue(0)
                     .HasColumnName("TOTAL_HOURS");
 
                 entity.Property(mc => mc.TotalAmount)
-                    .HasColumnType("NUMBER(10,2)")
-                    .HasDefaultValue(0)
                     .HasColumnName("TOTAL_AMOUNT");
 
                 entity.Property(mc => mc.Status)
@@ -389,6 +381,10 @@ namespace ContractMonthlyClaimSystem.Data
                     .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("LastName");
+
+                entity.Property(u => u.Email)
+                    .IsRequired()
+                    .HasColumnName("Email");
 
                 entity.Property(u => u.User_Type)
                     .IsRequired()

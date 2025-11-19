@@ -59,7 +59,7 @@
         <div class="col-md-3">
             <div class="card text-white bg-warning">
                 <div class="card-body text-center">
-                    <h4>R @Model.Where(m => m.Status == ClaimStatus.CoordinatorApproved || m.Status == ClaimStatus.ManagerApproved).Sum(m => m.TotalAmount).ToString("N0")</h4>
+                    <h4>R @Model.Where(m => m.Status == ClaimStatus.CoordinatorApproved || m.Status == ClaimStatus.ManagerApproved).Sum(m => m.TotalAmount)</h4>
                     <p class="mb-0">Total Approved Amount</p>
                 </div>
             </div>
@@ -110,9 +110,9 @@
                                             </td>
                                             <td>@claim.Lecturer?.EmployeeNumber</td>
                                             <td>@claim.DisplayMonth</td>
-                                            <td>@claim.TotalHours.ToString("N1")</td>
+                                            <td>@claim.TotalHours</td>
                                             <td class="fw-bold @(claim.Status == ClaimStatus.Rejected ? "text-danger" : "text-success")">
-                                                R @claim.TotalAmount.ToString("N2")
+                                                R @claim.TotalAmount
                                             </td>
                                             <td>
                                                 <span class="badge @GetStatusBadgeClass(claim.Status)">

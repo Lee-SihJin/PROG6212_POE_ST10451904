@@ -16,7 +16,7 @@
                             </h2>
                             <p class="card-text mb-0">
                                 Employee Number: @Model.Lecturer?.EmployeeNumber |
-                                Hourly Rate: R @Model.Lecturer?.HourlyRate.ToString("N2")
+                                Hourly Rate: R @Model.Lecturer?.HourlyRate
                             </p>
                         </div>
                         <div class="col-md-4 text-end">
@@ -141,7 +141,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Hourly Rate</label>
                                     <input type="text" class="form-control"
-                                           value="R @Model.Lecturer?.HourlyRate.ToString("N2")" readonly>
+                                           value="R @Model.Lecturer?.HourlyRate" readonly>
                                     <div class="form-text">Your current contracted hourly rate</div>
                                 </div>
 
@@ -244,8 +244,8 @@
                                         <tr>
                                             <td>@claim.DisplayMonth</td>
                                             <td>@claim.SubmissionDate.ToString("dd MMM yyyy")</td>
-                                            <td>@claim.TotalHours.ToString("N1")</td>
-                                            <td>R @claim.TotalAmount.ToString("N2")</td>
+                                            <td>@claim.TotalHours</td>
+                                            <td>R @claim.TotalAmount</td>
                                             <td>
                                                 <span class="badge @GetStatusBadgeClass(claim.Status)">
                                                     @claim.Status

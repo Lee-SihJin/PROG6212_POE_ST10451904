@@ -67,7 +67,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <h4 class="card-title">R @Model.TotalAmountApproved.ToString("N0")</h4>
+                            <h4 class="card-title">R @Model.TotalAmountApproved</h4>
                             <p class="card-text">Total Approved Amount</p>
                         </div>
                         <div class="align-self-center">
@@ -133,8 +133,8 @@
                                                 <small class="text-muted">@claim.Lecturer?.EmployeeNumber</small>
                                             </td>
                                             <td>@claim.DisplayMonth</td>
-                                            <td>@claim.TotalHours.ToString("N1")</td>
-                                            <td class="fw-bold text-success">R @claim.TotalAmount.ToString("N2")</td>
+                                            <td>@claim.TotalHours</td>
+                                            <td class="fw-bold text-success">R @claim.TotalAmount</td>
                                             <td>
                                                 @if (claim.Coordinator != null)
                                                 {
@@ -229,7 +229,7 @@
                         <div class="col-md-6">
                             <div class="card bg-light mb-3">
                                 <div class="card-body text-center">
-                                    <h3 class="text-primary">R @Model.TotalAmountApproved.ToString("N0")</h3>
+                                    <h3 class="text-primary">R @Model.TotalAmountApproved</h3>
                                     <p class="mb-0">Total Approved Amount</p>
                                 </div>
                             </div>
@@ -265,7 +265,7 @@
                                         <h6 class="mb-1">@claim.Lecturer?.FullName</h6>
                                         <small class="text-muted">@claim.ManagerApprovalDate?.ToString("dd MMM")</small>
                                     </div>
-                                    <p class="mb-1 small">@claim.DisplayMonth - R @claim.TotalAmount.ToString("N2")</p>
+                                    <p class="mb-1 small">@claim.DisplayMonth - R @claim.TotalAmount</p>
                                     <span class="badge @GetStatusBadgeClass(claim.Status)">
                                         @claim.Status
                                     </span>

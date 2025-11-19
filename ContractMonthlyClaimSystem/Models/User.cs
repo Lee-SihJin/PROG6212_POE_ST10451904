@@ -16,6 +16,10 @@ namespace ContractMonthlyClaimSystem.Models
         public string LastName { get; set; }
 
         [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
         public User_Type User_Type { get; set; }
 
         // Foreign keys for specific user types

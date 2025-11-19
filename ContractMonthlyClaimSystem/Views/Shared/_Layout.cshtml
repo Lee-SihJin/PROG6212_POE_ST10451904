@@ -45,6 +45,24 @@
                                 </a>
                             </li>
                             <!-- Show role-specific navigation -->
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Admin" asp-action="Index">
+                                        <i class="fas fa-tools me-1"></i>Admin
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Admin" asp-action="AllClaims">
+                                        <i class="fas fa-tools me-1"></i>All Claims
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Admin" asp-action="Reports">
+                                        <i class="fas fa-tools me-1"></i>Reports
+                                    </a>
+                                </li>
+                            }
                             @if (User.IsInRole("ProgrammeCoordinator") || User.IsInRole("Administrator"))
                             {
                                 <li class="nav-item">

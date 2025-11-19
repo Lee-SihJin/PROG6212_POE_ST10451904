@@ -5,7 +5,7 @@ namespace ContractMonthlyClaimSystem.Models
     public class ProgrammeCoordinator
     {
         [Key]
-        public int CoordinatorId { get; set; }
+        public int? CoordinatorId { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -23,7 +23,7 @@ namespace ContractMonthlyClaimSystem.Models
         [StringLength(100)]
         public string Department { get; set; }
 
-        public bool IsActive { get; set; } = true;
+        public int IsActive { get; set; } 
 
         // Navigation properties
         public virtual ICollection<MonthlyClaim> ApprovedClaims { get; set; }

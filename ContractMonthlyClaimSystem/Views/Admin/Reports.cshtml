@@ -1,0 +1,312 @@
+﻿@model ContractMonthlyClaimSystem.Models.ViewModels.AdminReportsViewModel
+@{
+    ViewData["Title"] = "System Reports";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2 class="card-title">
+                                <i class="fas fa-chart-line me-2"></i>System Reports & Analytics
+                            </h2>
+                            <p class="card-text mb-0">
+                                Comprehensive overview of claims, performance metrics, and system statistics
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="bg-light text-dark p-3 rounded">
+                                <h5 class="mb-1">Total Claims Processed</h5>
+                                <h4 class="text-primary mb-0">@Model.TotalClaimsCount</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title">@Model.TotalApprovedClaimsCount</h4>
+                            <p class="card-text">Approved Claims</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title">@Model.TotalRejectedClaimsCount</h4>
+                            <p class="card-text">Rejected Claims</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-times-circle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title">@Model.TotalPendingClaimsCount</h4>
+                            <p class="card-text">Pending Approval</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-clock fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title">R @Model.TotalAmountApproved</h4>
+                            <p class="card-text">Total Approved Amount</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-money-bill-wave fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Controls -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-download me-2"></i>Export Reports
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="ExportClaimsReport" class="row g-3">
+                        @Html.AntiForgeryToken()
+                        <div class="col-md-3">
+                            <label for="reportType" class="form-label">Report Type</label>
+                            <select class="form-select" id="reportType" name="reportType" required>
+                                <option value="detailed">Detailed Claims Report</option>
+                                <option value="summary">Monthly Summary Report</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="format" class="form-label">Format</label>
+                            <select class="form-select" id="format" name="format" required>
+                                <option value="csv">CSV</option>
+                                <option value="excel">Excel</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="status" class="form-label">Status Filter</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="">All Statuses</option>
+                                <option value="Submitted">Submitted</option>
+                                <option value="CoordinatorApproved">Coordinator Approved</option>
+                                <option value="ManagerApproved">Manager Approved</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-file-export me-2"></i>Export Report
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Statistics -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-alt me-2"></i>Monthly Claims Statistics (@DateTime.Now.Year)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.MonthlyStats.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Submitted</th>
+                                        <th>Approved</th>
+                                        <th>Rejected</th>
+                                        <th>Pending</th>
+                                        <th>Total Amount</th>
+                                        <th>Approval Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var stat in Model.MonthlyStats)
+                                    {
+                                        <tr>
+                                            <td>@stat.MonthName</td>
+                                            <td>@stat.SubmittedCount</td>
+                                            <td class="text-success fw-bold">@stat.ApprovedCount</td>
+                                            <td class="text-danger">@stat.RejectedCount</td>
+                                            <td class="text-warning">@(stat.SubmittedCount - stat.ApprovedCount - stat.RejectedCount)</td>
+                                            <td class="fw-bold">R @stat.TotalAmount</td>
+                                            <td>
+                                                @if (stat.SubmittedCount > 0)
+                                                {
+                                                    var approvalRate = (stat.ApprovedCount * 100.0 / stat.SubmittedCount);
+                                                    <span class="badge @(approvalRate >= 80 ? "bg-success" : approvalRate >= 60 ? "bg-warning" : "bg-danger")">
+                                                        @approvalRate.ToString("N1")%
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">N/A</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Monthly Data Available</h5>
+                            <p class="text-muted">No claims have been processed yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Metrics -->
+    <div class="row">
+        <!-- Top Lecturers -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-trophy me-2"></i>Top Lecturers by Claims Value
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.LecturerStats.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var lecturer in Model.LecturerStats)
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@lecturer.LecturerName</h6>
+                                        <small class="text-muted">@lecturer.TotalClaims claims</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <strong class="text-success">R @lecturer.TotalAmount</strong>
+                                        <br>
+                                        <small class="text-muted">Avg: R @lecturer.AverageAmount.</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-3">
+                            <i class="fas fa-users fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">No lecturer data available</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Coordinator Performance -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-check me-2"></i>Coordinator Performance
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.CoordinatorStats.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var coordinator in Model.CoordinatorStats)
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@coordinator.CoordinatorName</h6>
+                                        <small class="text-muted">@coordinator.TotalProcessed claims processed</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge @(coordinator.AverageProcessingDays <= 3 ? "bg-success" : coordinator.AverageProcessingDays <= 7 ? "bg-warning" : "bg-danger")">
+                                            @coordinator.AverageProcessingDays.ToString("N1") days avg.
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-3">
+                            <i class="fas fa-user-tie fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">No coordinator data available</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="btn-group" role="group">
+                        <a asp-controller="Admin" asp-action="AllClaims" class="btn btn-outline-primary">
+                            <i class="fas fa-list me-2"></i>View All Claims
+                        </a>
+                        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-tachometer-alt me-2"></i>Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

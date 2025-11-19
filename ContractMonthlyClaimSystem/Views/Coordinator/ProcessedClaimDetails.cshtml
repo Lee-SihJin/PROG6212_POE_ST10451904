@@ -134,16 +134,16 @@
                             <table class="table table-borderless">
                                 <tr>
                                     <th width="40%">Total Hours:</th>
-                                    <td>@Model.TotalHours.ToString("N1") hours</td>
+                                    <td>@Model.TotalHours hours</td>
                                 </tr>
                                 <tr>
                                     <th>Hourly Rate:</th>
-                                    <td>R @Model.Lecturer?.HourlyRate.ToString("N2")</td>
+                                    <td>R @Model.Lecturer?.HourlyRate</td>
                                 </tr>
                                 <tr>
                                     <th>Total Amount:</th>
                                     <td class="fw-bold @(Model.CoordinatorId != null && Model.Status == ClaimStatus.CoordinatorApproved ? "text-success" : "text-muted")">
-                                        R @Model.TotalAmount.ToString("N2")
+                                        R @Model.TotalAmount
                                     </td>
                                 </tr>
                                 @if (Model.CoordinatorApprovalDate.HasValue)
@@ -374,16 +374,16 @@
                     <table class="table table-sm table-borderless">
                         <tr>
                             <td>Total Hours:</td>
-                            <td class="text-end fw-bold">@Model.TotalHours.ToString("N1")</td>
+                            <td class="text-end fw-bold">@Model.TotalHours</td>
                         </tr>
                         <tr>
                             <td>Hourly Rate:</td>
-                            <td class="text-end">R @Model.Lecturer?.HourlyRate.ToString("N2")</td>
+                            <td class="text-end">R @Model.Lecturer?.HourlyRate</td>
                         </tr>
                         <tr>
                             <td>Total Amount:</td>
                             <td class="text-end fw-bold @(Model.CoordinatorId != null && Model.Status == ClaimStatus.CoordinatorApproved ? "text-success" : "text-muted")">
-                                R @Model.TotalAmount.ToString("N2")
+                                R @Model.TotalAmount
                             </td>
                         </tr>
                         <tr>
