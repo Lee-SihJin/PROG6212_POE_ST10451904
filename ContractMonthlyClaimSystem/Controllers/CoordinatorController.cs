@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContractMonthlyClaimSystem.Controllers
 {
-    [Authorize(Roles = "Coordinator,Administrator")]
+    [Authorize(Roles = "ProgrammeCoordinator,Administrator")]
     public class CoordinatorController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -130,27 +130,11 @@ namespace ContractMonthlyClaimSystem.Controllers
                 switch (model.UserType)
                 {
                     case User_Type.Lecturer:
-                        // Check if employee number already exists for lecturers
-                        if (await _context.Lecturers.AnyAsync(l => l.EmployeeNumber == model.EmployeeNumber))
-                        {
-                            ModelState.AddModelError("EmployeeNumber", "Employee number already exists.");
-                            model.UserTypes = Enum.GetValues(typeof(User_Type))
-                                               .Cast<User_Type>()
-                                               .Where(ut => ut != User_Type.Administrator)
-                                               .Select(ut => new SelectListItem
-                                               {
-                                                   Value = ((int)ut).ToString(),
-                                                   Text = ut.ToString()
-                                               }).ToList();
-                            return View(model);
-                        }
-
                         var lecturer = new Lecturer
                         {
                             FirstName = model.FirstName,
                             LastName = model.LastName,
                             Email = model.Email,
-                            EmployeeNumber = model.EmployeeNumber,
                             PhoneNumber = model.PhoneNumber,
                             HourlyRate = model.HourlyRate,
                             ContractStartDate = model.ContractStartDate ?? DateTime.UtcNow,
@@ -213,15 +197,27 @@ namespace ContractMonthlyClaimSystem.Controllers
                 {
                     var user = new User
                     {
-                        UserName = model.Email,
-                        Email = model.Email,
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
+                        UserName = model.Email?.Trim(),
+                        NormalizedUserName = model.Email?.Trim().ToUpperInvariant(),
+                        Email = model.Email?.Trim(),
+                        NormalizedEmail = model.Email?.Trim().ToUpperInvariant(),
+                        FirstName = model.FirstName?.Trim(),
+                        LastName = model.LastName?.Trim(),
                         User_Type = model.UserType,
                         CreatedDate = DateTime.UtcNow,
+
+                        // === CORRECT IDENTITY PROPERTIES ===
+                        EmailConfirmed = true,           // Good - skip email verification
+                        PhoneNumberConfirmed = false,    // Change to false (not true)
+                        TwoFactorEnabled = false,        // Change to false (not true) 
+                        LockoutEnabled = true,           // Good
+                        AccessFailedCount = 0,           // Good
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        ConcurrencyStamp = Guid.NewGuid().ToString(),
+                        PhoneNumber = null
                     };
 
-                    // Set the appropriate foreign key based on user type
+                    // Set foreign key
                     switch (model.UserType)
                     {
                         case User_Type.Lecturer:
@@ -257,7 +253,7 @@ namespace ContractMonthlyClaimSystem.Controllers
                 _logger.LogInformation("{UserType} {FirstName} {LastName} created successfully", model.UserType, model.FirstName, model.LastName);
                 TempData["SuccessMessage"] = $"{model.UserType} {model.FirstName} {model.LastName} created successfully.";
 
-                return RedirectToAction("Users"); // You'll need to create this action to list all users
+                return RedirectToAction("CreateUser"); // You'll need to create this action to list all users
             }
             catch (Exception ex)
             {
@@ -384,8 +380,7 @@ public async Task<IActionResult> Reports()
                 if (!string.IsNullOrEmpty(lecturer))
                 {
                     query = query.Where(mc => mc.Lecturer.FirstName.Contains(lecturer) ||
-                                             mc.Lecturer.LastName.Contains(lecturer) ||
-                                             mc.Lecturer.EmployeeNumber.Contains(lecturer));
+                                             mc.Lecturer.LastName.Contains(lecturer));
                 }
 
                 if (!string.IsNullOrEmpty(coordinator))
@@ -506,7 +501,7 @@ public async Task<IActionResult> Reports()
 
                 foreach (var claim in claims)
                 {
-                    csv.AppendLine($"{claim.ClaimId},\"{claim.Lecturer?.FullName}\",\"{claim.Lecturer?.EmployeeNumber}\",\"{claim.DisplayMonth}\",{claim.Status},{claim.TotalHours},{claim.TotalAmount},\"{claim.SubmissionDate:yyyy-MM-dd}\",\"{claim.Coordinator?.FullName}\",\"{claim.CoordinatorApprovalDate?.ToString("yyyy-MM-dd")}\",\"{claim.Manager?.FullName}\",\"{claim.ManagerApprovalDate?.ToString("yyyy-MM-dd")}\"");
+                    csv.AppendLine($"{claim.ClaimId},\"{claim.Lecturer?.FullName}\",\"{claim.Lecturer.LecturerId}\",\"{claim.DisplayMonth}\",{claim.Status},{claim.TotalHours},{claim.TotalAmount},\"{claim.SubmissionDate:yyyy-MM-dd}\",\"{claim.Coordinator?.FullName}\",\"{claim.CoordinatorApprovalDate?.ToString("yyyy-MM-dd")}\",\"{claim.Manager?.FullName}\",\"{claim.ManagerApprovalDate?.ToString("yyyy-MM-dd")}\"");
                 }
             }
             else // summary

@@ -19,10 +19,6 @@ namespace ContractMonthlyClaimSystem.Models
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(20)]
-        public string EmployeeNumber { get; set; }
-
         [StringLength(15)]
         public string PhoneNumber { get; set; }
 

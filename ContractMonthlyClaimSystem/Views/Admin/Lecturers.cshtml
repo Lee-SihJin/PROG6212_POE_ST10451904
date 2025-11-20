@@ -19,8 +19,8 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th>Lecturer ID</th>
                                 <th>Name</th>
-                                <th>Employee #</th>
                                 <th>Email</th>
                                 <th>Hourly Rate</th>
                                 <th>Contract Dates</th>
@@ -32,8 +32,8 @@
                             @foreach (var lecturer in Model)
                             {
                                 <tr>
+                                    <td>@lecturer.LecturerId</td>
                                     <td>@lecturer.FullName</td>
-                                    <td>@lecturer.EmployeeNumber</td>
                                     <td>@lecturer.Email</td>
                                     <td>@lecturer.HourlyRate</td>
                                     <td>

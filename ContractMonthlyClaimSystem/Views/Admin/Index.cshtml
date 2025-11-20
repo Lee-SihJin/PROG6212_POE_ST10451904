@@ -110,7 +110,7 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Employee #</th>
+                                        <th>Lecturer ID</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -119,12 +119,8 @@
                                     {
                                         <tr>
                                             <td>@lecturer.FullName</td>
-                                            <td>@lecturer.EmployeeNumber</td>
-                                            <td>
-                                                <span class="badge @(lecturer.IsActive==1 ? "badge-success" : "badge-secondary")">
-                                                    @(lecturer.IsActive==1 ? "Active" : "Inactive")
-                                                </span>
-                                            </td>
+                                            <td>@lecturer.LecturerId</td>
+                                            <td>@(lecturer.IsActive==1 ? "Active" : "Inactive")</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -163,9 +159,7 @@
                                         <tr>
                                             <td>@user.FullName</td>
                                             <td>@user.Email</td>
-                                            <td>
-                                                <span class="badge badge-info">@user.User_Type</span>
-                                            </td>
+                                            <td>@user.User_Type</td>
                                         </tr>
                                     }
                                 </tbody>

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContractMonthlyClaimSystem.Controllers
 {
-    [Authorize(Roles = "Manager,Administrator")]
+    [Authorize(Roles = "AcademicManager,Administrator")]
     public class ManagerController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -283,8 +283,7 @@ namespace ContractMonthlyClaimSystem.Controllers
                 if (!string.IsNullOrEmpty(lecturer))
                 {
                     query = query.Where(mc => mc.Lecturer.FirstName.Contains(lecturer) ||
-                                             mc.Lecturer.LastName.Contains(lecturer) ||
-                                             mc.Lecturer.EmployeeNumber.Contains(lecturer));
+                                             mc.Lecturer.LastName.Contains(lecturer));
                 }
 
                 // Order by decision date (most recent first)

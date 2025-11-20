@@ -85,7 +85,7 @@
                                     <tr>
                                         <th>Claim ID</th>
                                         <th>Lecturer</th>
-                                        <th>Employee Number</th>
+                                        <th>Lecturer ID</th>
                                         <th>Claim Month</th>
                                         <th>Hours</th>
                                         <th>Amount</th>
@@ -108,7 +108,7 @@
                                                 <br>
                                                 <small class="text-muted">@claim.Lecturer?.Email</small>
                                             </td>
-                                            <td>@claim.Lecturer?.EmployeeNumber</td>
+                                            <td>@claim.Lecturer.LecturerId</td>
                                             <td>@claim.DisplayMonth</td>
                                             <td>@claim.TotalHours</td>
                                             <td class="fw-bold @(claim.Status == ClaimStatus.Rejected ? "text-danger" : "text-success")">

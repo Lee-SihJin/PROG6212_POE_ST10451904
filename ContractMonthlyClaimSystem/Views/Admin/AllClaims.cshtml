@@ -162,7 +162,7 @@
                                             <td>
                                                 <strong>@claim.Lecturer?.FullName</strong>
                                                 <br>
-                                                <small class="text-muted">@claim.Lecturer?.EmployeeNumber</small>
+                                                <small class="text-muted">@claim.Lecturer.LecturerId</small>
                                             </td>
                                             <td>@claim.DisplayMonth</td>
                                             <td>
@@ -286,9 +286,6 @@
             <div class="card">
                 <div class="card-body text-center">
                     <div class="btn-group" role="group">
-                        <a asp-controller="Admin" asp-action="Reports" class="btn btn-outline-info">
-                            <i class="fas fa-chart-line me-2"></i>View Reports
-                        </a>
                         <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary">
                             <i class="fas fa-tachometer-alt me-2"></i>Back to Dashboard
                         </a>

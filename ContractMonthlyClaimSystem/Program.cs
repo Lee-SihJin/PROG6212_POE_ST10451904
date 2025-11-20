@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add DbContext with Oracle
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .EnableSensitiveDataLogging()
+           .EnableDetailedErrors()
+           .LogTo(Console.WriteLine, LogLevel.Information));
 
 // Add Identity
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>

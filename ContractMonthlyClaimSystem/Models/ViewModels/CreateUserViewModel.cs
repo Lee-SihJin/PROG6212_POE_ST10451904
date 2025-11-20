@@ -25,11 +25,6 @@ public class CreateUserViewModel
 
     public List<SelectListItem>? UserTypes { get; set; }
 
-    // Lecturer specific fields
-    [Display(Name = "Employee Number")]
-    [StringLength(20)]
-    public string? EmployeeNumber { get; set; }
-
     [Display(Name = "Phone Number")]
     [StringLength(15)]
     public string? PhoneNumber { get; set; }

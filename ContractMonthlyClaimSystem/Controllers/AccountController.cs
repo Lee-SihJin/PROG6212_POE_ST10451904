@@ -109,11 +109,11 @@ namespace ContractMonthlyClaimSystem.Controllers
             {
                 return RedirectToAction("Index", "Admin");
             }
-            else if (await _userManager.IsInRoleAsync(user, "Manager"))
+            else if (await _userManager.IsInRoleAsync(user, "AcademicManager"))
             {
                 return RedirectToAction("Index", "Manager");
             }
-            else if (await _userManager.IsInRoleAsync(user, "Coordinator"))
+            else if (await _userManager.IsInRoleAsync(user, "ProgrammeCoordinator"))
             {
                 return RedirectToAction("Index", "Coordinator");
             }

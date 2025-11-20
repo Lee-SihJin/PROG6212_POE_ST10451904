@@ -25,7 +25,7 @@ namespace ContractMonthlyClaimSystem.Data
 
             // Configure Oracle table names
             ConfigureTableNames(modelBuilder);
-            
+
             // Configure all entities
             ConfigureLecturer(modelBuilder);
             ConfigureProgrammeCoordinator(modelBuilder);
@@ -34,7 +34,9 @@ namespace ContractMonthlyClaimSystem.Data
             ConfigureClaimItem(modelBuilder);
             ConfigureSupportingDocument(modelBuilder);
             ConfigureUser(modelBuilder);
-            
+            ConfigureRole(modelBuilder); // ADDED: Role configuration
+            ConfigureUserRole(modelBuilder); // ADDED: Separate UserRole configuration
+
             // Configure indexes
             ConfigureIndexes(modelBuilder);
         }
@@ -80,11 +82,6 @@ namespace ContractMonthlyClaimSystem.Data
                     .IsRequired()
                     .HasMaxLength(256)
                     .HasColumnName("EMAIL");
-
-                entity.Property(l => l.EmployeeNumber)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .HasColumnName("EMPLOYEENUMBER");
 
                 entity.Property(l => l.PhoneNumber)
                     .HasMaxLength(15)
@@ -372,6 +369,53 @@ namespace ContractMonthlyClaimSystem.Data
         {
             modelBuilder.Entity<User>(entity =>
             {
+                // === IDENTITY BOOLEAN CONVERSIONS WITH DEFAULTS ===
+                entity.Property(u => u.EmailConfirmed)
+                    .HasConversion<int>()
+                    .HasDefaultValue(0)  // Critical: sets default to false
+                    .IsRequired()        // Make sure it's required
+                    .HasColumnName("EmailConfirmed");
+
+                entity.Property(u => u.PhoneNumberConfirmed)
+                    .HasConversion<int>()
+                    .HasDefaultValue(0)
+                    .IsRequired()
+                    .HasColumnName("PhoneNumberConfirmed");
+
+                entity.Property(u => u.TwoFactorEnabled)
+                    .HasConversion<int>()
+                    .HasDefaultValue(0)
+                    .IsRequired()
+                    .HasColumnName("TwoFactorEnabled");
+
+                entity.Property(u => u.LockoutEnabled)
+                    .HasConversion<int>()
+                    .HasDefaultValue(1)  // Usually true by default
+                    .IsRequired()
+                    .HasColumnName("LockoutEnabled");
+
+                entity.Property(u => u.AccessFailedCount)
+                    .HasDefaultValue(0)
+                    .IsRequired()
+                    .HasColumnName("AccessFailedCount");
+
+                entity.Property(u => u.PasswordHash)
+                    .HasColumnType("NVARCHAR2(4000)")
+                    .HasColumnName("PasswordHash");
+
+                entity.Property(u => u.SecurityStamp)
+                    .HasColumnType("NVARCHAR2(4000)")
+                    .HasColumnName("SecurityStamp");
+
+                entity.Property(u => u.ConcurrencyStamp)
+                    .HasColumnType("NVARCHAR2(4000)")
+                    .HasColumnName("ConcurrencyStamp");
+
+                entity.Property(u => u.PhoneNumber)
+                    .HasColumnType("NVARCHAR2(20)")
+                    .HasColumnName("PhoneNumber");
+
+                // === YOUR EXISTING CONFIGURATIONS ===
                 entity.Property(u => u.FirstName)
                     .IsRequired()
                     .HasMaxLength(100)
@@ -381,10 +425,6 @@ namespace ContractMonthlyClaimSystem.Data
                     .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("LastName");
-
-                entity.Property(u => u.Email)
-                    .IsRequired()
-                    .HasColumnName("Email");
 
                 entity.Property(u => u.User_Type)
                     .IsRequired()
@@ -402,13 +442,7 @@ namespace ContractMonthlyClaimSystem.Data
 
                 entity.Property(u => u.CreatedDate)
                     .IsRequired()
-                    .HasColumnName("CreatedDate");
-
-                // FIX: Use NUMBER(1) for boolean with proper conversion
-                //entity.Property(u => u.IsActive)
-                //    .HasColumnType("NUMBER(1)")
-                //    .HasDefaultValue(true)
-                //    .HasColumnName("IsActive");
+                    .HasColumnName("CreatedDate");;
 
                 // Relationships
                 entity.HasOne(u => u.Lecturer)
@@ -431,6 +465,47 @@ namespace ContractMonthlyClaimSystem.Data
             });
         }
 
+        // ADDED: Configure Role entity to fix NCLOB issue
+        private void ConfigureRole(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<IdentityRole<int>>(entity =>
+            {
+                // Fix NCLOB datatype for ConcurrencyStamp
+                entity.Property(r => r.ConcurrencyStamp)
+                    .HasColumnType("NVARCHAR2(4000)")
+                    .HasColumnName("ConcurrencyStamp");
+
+                // Configure other role properties
+                entity.Property(r => r.Name)
+                    .HasMaxLength(256)
+                    .HasColumnName("Name");
+
+                entity.Property(r => r.NormalizedName)
+                    .HasMaxLength(256)
+                    .HasColumnName("NormalizedName");
+            });
+        }
+
+        // ADDED: Separate configuration for UserRole
+        private void ConfigureUserRole(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<IdentityUserRole<int>>(entity =>
+            {
+                entity.ToTable("USER_ROLES");
+
+                entity.Property(ur => ur.UserId)
+                    .HasColumnName("UserId")
+                    .HasColumnType("NUMBER(10)");
+
+                entity.Property(ur => ur.RoleId)
+                    .HasColumnName("RoleId")
+                    .HasColumnType("NUMBER(10)");
+
+                // Define composite primary key
+                entity.HasKey(ur => new { ur.UserId, ur.RoleId });
+            });
+        }
+
         private void ConfigureIndexes(ModelBuilder modelBuilder)
         {
             // Lecturer indexes
@@ -438,11 +513,6 @@ namespace ContractMonthlyClaimSystem.Data
                 .HasIndex(l => l.Email)
                 .IsUnique()
                 .HasDatabaseName("IX_LECTURERS_EMAIL");
-
-            modelBuilder.Entity<Lecturer>()
-                .HasIndex(l => l.EmployeeNumber)
-                .IsUnique()
-                .HasDatabaseName("IX_LECTURERS_EMP_NUM");
 
             // ProgrammeCoordinator indexes
             modelBuilder.Entity<ProgrammeCoordinator>()
