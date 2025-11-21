@@ -1,6 +1,6 @@
-﻿@model CreateUserViewModel
+﻿@model ContractMonthlyClaimSystem.Models.ViewModels.EditUserViewModel;
 @{
-    ViewData["Title"] = "Add New User";
+    ViewData["Title"] = "Edit User";
 }
 
 <div class="container-fluid">
@@ -8,10 +8,9 @@
         <div class="col-lg-8">
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Add New User</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Edit User</h6>
                 </div>
                 <div class="card-body">
-                    <!-- Display success/error messages -->
                     @if (TempData["SuccessMessage"] != null)
                     {
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -30,18 +29,10 @@
                             </button>
                         </div>
                     }
-                    @if (TempData["WarningMessage"] != null)
-                    {
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            @TempData["WarningMessage"]
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    }
 
-                    <form method="post" asp-action="CreateUser">
+                    <form method="post" asp-action="EditUser">
                         @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
 
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -72,17 +63,16 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label asp-for="UserType"></label>
-                                    <select asp-for="UserType" asp-items="Model.UserTypes" class="form-control" id="userTypeSelect">
-                                        <option value="">-- Select User Type --</option>
-                                    </select>
-                                    <span asp-validation-for="UserType" class="text-danger"></span>
+                                    <label>User Type</label>
+                                    <input class="form-control" value="@Model.UserType" readonly />
+                                    <small class="form-text text-muted">User type cannot be changed.</small>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Lecturer Specific Fields -->
-                        <div id="lecturerFields" style="display: none;">
+                        @if (Model.UserType == User_Type.Lecturer)
+                        {
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -118,11 +108,22 @@
                                         <span asp-validation-for="ContractEndDate" class="text-danger"></span>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="IsActive"></label>
+                                        <select asp-for="IsActive" class="form-control">
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        }
 
                         <!-- Programme Coordinator Specific Field -->
-                        <div id="coordinatorFields" style="display: none;">
+                        @if (Model.UserType == User_Type.ProgrammeCoordinator)
+                        {
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -131,37 +132,51 @@
                                         <span asp-validation-for="Department" class="text-danger"></span>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="IsActive"></label>
+                                        <select asp-for="IsActive" class="form-control">
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        }
 
-                        <div class="form-group">
-                            <label asp-for="IsActive"></label>
-                            <select asp-for="IsActive" class="form-control">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                            <span asp-validation-for="IsActive" class="text-danger"></span>
-                        </div>
+                        <!-- Academic Manager Field -->
+                        @if (Model.UserType == User_Type.AcademicManager)
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="IsActive"></label>
+                                        <select asp-for="IsActive" class="form-control">
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
                         <hr />
-
-                        <div id="userAccountFields">
-                            <div class="form-group">
-                                <label asp-for="TemporaryPassword"></label>
-                                <input asp-for="TemporaryPassword" class="form-control" type="password" />
-                                <span asp-validation-for="TemporaryPassword" class="text-danger"></span>
-                                <small class="form-text text-muted">Password must be at least 6 characters long.</small>
-                            </div>
+                        <h6 class="font-weight-bold text-primary">Reset Password</h6>
+                        <div class="form-group">
+                            <label asp-for="NewPassword"></label>
+                            <input asp-for="NewPassword" class="form-control" type="password" />
+                            <span asp-validation-for="NewPassword" class="text-danger"></span>
+                            <small class="form-text text-muted">Leave blank to keep current password. Minimum 6 characters.</small>
                         </div>
 
                         <div class="form-group mt-4">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Create User
+                                <i class="fas fa-save"></i> Update User
                             </button>
-                            <a href="@Url.Action("UserList")" class="btn btn-secondary">Back to List</a>
-                            <a href="@Url.Action("Index")" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Back to Dashboard
-                            </a>
+                            <a href="@Url.Action("ViewUser", new { id = Model.Id })" class="btn btn-secondary">Cancel</a>
+                            <a href="@Url.Action("UserList")" class="btn btn-outline-secondary">Back to List</a>
                         </div>
                     </form>
                 </div>
@@ -171,27 +186,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            // Toggle user type specific fields
-            $('#userTypeSelect').change(function () {
-                var userType = $(this).val();
-
-                // Hide all specific fields first
-                $('#lecturerFields').hide();
-                $('#coordinatorFields').hide();
-
-                // Show relevant fields based on user type
-                if (userType === '1') { // Lecturer
-                    $('#lecturerFields').show();
-                } else if (userType === '2') { // ProgrammeCoordinator
-                    $('#coordinatorFields').show();
-                }
-                // AcademicManager (3) doesn't have additional fields
-            });
-
-            // Trigger change event on page load
-            $('#userTypeSelect').trigger('change');
-        });
-    </script>
+    <partial name="_ValidationScriptsPartial" />
 }

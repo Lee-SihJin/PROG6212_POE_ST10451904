@@ -1,0 +1,286 @@
+﻿@model List<User>
+@{
+    ViewData["Title"] = "User List";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">User Management</h1>
+        <a href="@Url.Action("CreateUser")" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New User
+        </a>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <!-- Users Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">All Users</h6>
+            <span class="badge badge-primary badge-pill">@Model.Count users</span>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>User Type</th>
+                                <th>Status</th>
+                                <th>Created Date</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.OrderByDescending(u => u.CreatedDate))
+                            {
+                                <tr>
+                                    <td class="font-weight-bold">@user.FullName</td>
+                                    <td>@user.Email</td>
+                                    <td>
+                                        @switch (user.User_Type)
+                                        {
+                                            case User_Type.Administrator:
+                                                <span>@user.User_Type</span>
+                                                break;
+                                            case User_Type.Lecturer:
+                                                <span>@user.User_Type</span>
+                                                break;
+                                            case User_Type.ProgrammeCoordinator:
+                                                <span>@user.User_Type</span>
+                                                break;
+                                            case User_Type.AcademicManager:
+                                                <span>@user.User_Type</span>
+                                                break;
+                                            default:
+                                                <span>@user.User_Type</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        <span>Active</span>
+                                    </td>
+                                    <td>@user.CreatedDate.ToString("MMM dd, yyyy")</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group" aria-label="User Actions">
+                                            <!-- View Button -->
+                                            <a href="@Url.Action("ViewUser", new { id = user.Id })"
+                                               class="btn btn-info btn-sm" title="View User">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+
+                                            <!-- Edit Button -->
+                                            <a href="@Url.Action("EditUser", new { id = user.Id })"
+                                               class="btn btn-warning btn-sm" title="Edit User">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+                                            <!-- Delete Button - MAKE SURE THIS HAS THE CORRECT CLASS -->
+                                            @if (user.User_Type != User_Type.Administrator)
+                                            {
+                                                <button type="button"
+                                                        class="btn btn-danger btn-sm delete-user-btn"
+                                                        title="Delete User"
+                                                        data-user-id="@user.Id"
+                                                        data-user-name="@user.FullName">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button"
+                                                        class="btn btn-danger btn-sm"
+                                                        disabled
+                                                        title="Administrators cannot be deleted">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-users fa-4x text-muted mb-3"></i>
+                    <h5 class="text-muted">No Users Found</h5>
+                    <p class="text-muted">Get started by creating your first user.</p>
+                    <a href="@Url.Action("CreateUser")" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create First User
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle"></i> Confirm Delete
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the following user?</p>
+                <div class="alert alert-warning">
+                    <h6 class="alert-heading mb-1" id="userNameToDelete"></h6>
+                    <small class="mb-0">This user will be permanently removed from the system.</small>
+                </div>
+                <p class="text-danger small mb-0">
+                    <i class="fas fa-exclamation-circle"></i>
+                    This action cannot be undone and will permanently remove the user account and all associated data.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i> Delete User
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden form for actual deletion -->
+<form id="deleteUserForm" method="post" action="@Url.Action("DeleteUser", "Admin")" style="display: none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="deleteUserId" />
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM fully loaded - initializing delete functionality...');
+
+            let currentUserIdToDelete = null;
+            let deleteModal = null;
+
+            // Initialize Bootstrap modal
+            const modalElement = document.getElementById('deleteModal');
+            if (modalElement) {
+                deleteModal = new bootstrap.Modal(modalElement);
+                console.log('Bootstrap modal initialized');
+            } else {
+                console.error('Delete modal element not found!');
+            }
+
+            // Get all delete buttons
+            const deleteButtons = document.querySelectorAll('.delete-user-btn');
+            console.log('Found delete buttons:', deleteButtons.length);
+
+            // Add click event to each delete button
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    console.log('Delete button clicked!');
+
+                    const userId = this.getAttribute('data-user-id');
+                    const userName = this.getAttribute('data-user-name');
+
+                    console.log('User ID:', userId, 'User Name:', userName);
+
+                    if (!userId) {
+                        console.error('No user ID found!');
+                        return;
+                    }
+
+                    // Store the user ID for later use
+                    currentUserIdToDelete = userId;
+
+                    // Set the user name in the modal
+                    document.getElementById('userNameToDelete').textContent = userName;
+
+                    // Show the modal
+                    if (deleteModal) {
+                        deleteModal.show();
+                        console.log('Modal shown for user:', userName);
+                    }
+                });
+            });
+
+            // Handle cancel button click
+            document.getElementById('cancelDeleteBtn').addEventListener('click', function() {
+                console.log('Cancel button clicked - closing modal');
+                if (deleteModal) {
+                    deleteModal.hide();
+                }
+                currentUserIdToDelete = null;
+            });
+
+            // Handle confirm delete button click
+            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                console.log('Confirm delete clicked for user ID:', currentUserIdToDelete);
+
+                if (currentUserIdToDelete) {
+                    // Set the user ID in the hidden form
+                    document.getElementById('deleteUserId').value = currentUserIdToDelete;
+
+                    // Hide modal first
+                    if (deleteModal) {
+                        deleteModal.hide();
+                    }
+
+                    // Submit the form
+                    console.log('Submitting delete form for user ID:', currentUserIdToDelete);
+                    document.getElementById('deleteUserForm').submit();
+                } else {
+                    console.error('No user ID to delete!');
+                    if (deleteModal) {
+                        deleteModal.hide();
+                    }
+                }
+            });
+
+            // Also handle the close (X) button in modal header
+            modalElement.querySelector('.close').addEventListener('click', function() {
+                console.log('Modal close (X) button clicked');
+                currentUserIdToDelete = null;
+            });
+
+            // Reset when modal is hidden
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                console.log('Modal hidden - resetting deletion state');
+                currentUserIdToDelete = null;
+            });
+
+            // Debug: Check if all elements are found
+            console.log('Cancel button found:', !!document.getElementById('cancelDeleteBtn'));
+            console.log('Confirm button found:', !!document.getElementById('confirmDeleteBtn'));
+            console.log('Delete form found:', !!document.getElementById('deleteUserForm'));
+        });
+    </script>
+}
+}
+}

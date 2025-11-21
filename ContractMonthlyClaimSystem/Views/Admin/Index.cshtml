@@ -1,14 +1,11 @@
 ﻿@model ContractMonthlyClaimSystem.Models.ViewModels.AdminDashboardViewModel
 @{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "HR Dashboard";
 }
 
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Admin Dashboard</h1>
-        <a href="@Url.Action("CreateUser")" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New User
-        </a>
+        <h1>HR Dashboard</h1>
     </div>
 
     <!-- Statistics Cards -->
@@ -100,7 +97,6 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Recent Lecturers</h6>
-                    <a href="@Url.Action("Lecturers")" class="btn btn-sm btn-outline-primary">View All</a>
                 </div>
                 <div class="card-body">
                     @if (Model.RecentLecturers.Any())

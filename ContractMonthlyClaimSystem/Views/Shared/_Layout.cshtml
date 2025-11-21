@@ -49,16 +49,22 @@
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-light" asp-area="" asp-controller="Admin" asp-action="Index">
-                                        <i class="fas fa-tools me-1"></i>Admin
+                                        <i class="fas fa-user-tie me-1"></i>HR
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-light" asp-area="" asp-controller="Admin" asp-action="AllClaims">
-                                        <i class="fas fa-tools me-1"></i>All Claims
+                                        <i class="fas fa-list me-1"></i>All Claims
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Admin" asp-action="UserList">
+                                        <i class="fas fa-user me-1"></i>All User
+                                    </a>
+                                </li>
+                                
                             }
-                            @if (User.IsInRole("ProgrammeCoordinator") || User.IsInRole("Administrator"))
+                            @if (User.IsInRole("ProgrammeCoordinator"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-light" asp-area="" asp-controller="Coordinator" asp-action="Index">
@@ -66,7 +72,7 @@
                                     </a>
                                 </li>
                             }
-                            @if (User.IsInRole("Lecturer") || User.IsInRole("Administrator"))
+                            @if (User.IsInRole("Lecturer"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-light" asp-area="" asp-controller="Lecturer" asp-action="Index">
@@ -74,19 +80,11 @@
                                     </a>
                                 </li>
                             }
-                            @if (User.IsInRole("AcademicManager") || User.IsInRole("Administrator"))
+                            @if (User.IsInRole("AcademicManager"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-light" asp-area="" asp-controller="Manager" asp-action="Index">
                                         <i class="fas fa-user-tie me-1"></i>Manager
-                                    </a>
-                                </li>
-                            }
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-light" asp-area="" asp-controller="Test" asp-action="PasswordHashTester">
-                                        <i class="fas fa-tools me-1"></i>Test Tools
                                     </a>
                                 </li>
                             }
@@ -107,7 +105,7 @@
                                     <i class="fas fa-user me-1"></i>Welcome, @User.Identity.Name!
                                     @{
                                         var role = "User";
-                                        if (User.IsInRole("Administrator")) role = "Administrator";
+                                        if (User.IsInRole("Administrator")) role = "HR";
                                         else if (User.IsInRole("AcademicManager")) role = "Academic Manager";
                                         else if (User.IsInRole("ProgrammeCoordinator")) role = "Programme Coordinator";
                                         else if (User.IsInRole("Lecturer")) role = "Lecturer";

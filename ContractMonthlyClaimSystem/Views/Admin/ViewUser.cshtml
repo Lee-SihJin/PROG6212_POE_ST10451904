@@ -1,0 +1,176 @@
+﻿@model User
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>User Details</h1>
+        <div>
+            <a href="@Url.Action("EditUser", new { id = Model.Id })" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit User
+            </a>
+            <a href="@Url.Action("UserList")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Basic Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Full Name:</dt>
+                                <dd class="col-sm-8">@Model.FullName</dd>
+
+                                <dt class="col-sm-4">Email:</dt>
+                                <dd class="col-sm-8">@Model.Email</dd>
+
+                                <dt class="col-sm-4">User Type:</dt>
+                                <dd class="col-sm-8">
+                                    <span>@Model.User_Type</span>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Status:</dt>
+                                <dd class="col-sm-8">
+                                    @* Since IsActive is commented out, show Active for all *@
+                                    <span>Active</span>
+                                </dd>
+
+                                <dt class="col-sm-4">Created Date:</dt>
+                                <dd class="col-sm-8">@Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                                <dt class="col-sm-4">User ID:</dt>
+                                <dd class="col-sm-8">@Model.Id</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entity Specific Information -->
+            @if (Model.LecturerId.HasValue)
+            {
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Lecturer Information</h6>
+                    </div>
+                    <div class="card-body">
+                        @{
+                            var lecturer = ViewBag.Lecturer as Lecturer;
+                        }
+                        @if (lecturer != null)
+                        {
+                            <dl class="row">
+                                <dt class="col-sm-3">Lecturer ID:</dt>
+                                <dd class="col-sm-9">@lecturer.LecturerId</dd>
+
+                                <dt class="col-sm-3">Phone Number:</dt>
+                                <dd class="col-sm-9">@lecturer.PhoneNumber</dd>
+
+                                <dt class="col-sm-3">Hourly Rate:</dt>
+                                <dd class="col-sm-9">@lecturer.HourlyRate?.ToString("C")</dd>
+
+                                <dt class="col-sm-3">Contract Start:</dt>
+                                <dd class="col-sm-9">@lecturer.ContractStartDate.ToString("yyyy-MM-dd")</dd>
+
+                                <dt class="col-sm-3">Contract End:</dt>
+                                <dd class="col-sm-9">@(lecturer.ContractEndDate?.ToString("yyyy-MM-dd") ?? "Not set")</dd>
+
+                                <dt class="col-sm-3">Lecturer Status:</dt>
+                                <dd class="col-sm-9">
+                                    @if (lecturer.IsActive == 1)
+                                    {
+                                        <span>Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Inactive</span>
+                                    }
+                                </dd>
+                            </dl>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.CoordinatorId.HasValue)
+            {
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Coordinator Information</h6>
+                    </div>
+                    <div class="card-body">
+                        @{
+                            var coordinator = ViewBag.Coordinator as ProgrammeCoordinator;
+                        }
+                        @if (coordinator != null)
+                        {
+                            <dl class="row">
+                                <dt class="col-sm-3">Coordinator ID:</dt>
+                                <dd class="col-sm-9">@coordinator.CoordinatorId</dd>
+
+                                <dt class="col-sm-3">Department:</dt>
+                                <dd class="col-sm-9">@coordinator.Department</dd>
+
+                                <dt class="col-sm-3">Coordinator Status:</dt>
+                                <dd class="col-sm-9">
+                                    @if (coordinator.IsActive == 1)
+                                    {
+                                        <span>Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Inactive</span>
+                                    }
+                                </dd>
+                            </dl>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.ManagerId.HasValue)
+            {
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Manager Information</h6>
+                    </div>
+                    <div class="card-body">
+                        @{
+                            var manager = ViewBag.Manager as AcademicManager;
+                        }
+                        @if (manager != null)
+                        {
+                            <dl class="row">
+                                <dt class="col-sm-3">Manager ID:</dt>
+                                <dd class="col-sm-9">@manager.ManagerId</dd>
+
+                                <dt class="col-sm-3">Manager Status:</dt>
+                                <dd class="col-sm-9">
+                                    @if (manager.IsActive == 1)
+                                    {
+                                        <span>Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Inactive</span>
+                                    }
+                                </dd>
+                            </dl>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

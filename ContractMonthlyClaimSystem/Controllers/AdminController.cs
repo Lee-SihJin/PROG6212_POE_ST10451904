@@ -537,6 +537,316 @@ public async Task<IActionResult> Reports()
             // In a real application, you would use a library like EPPlus or ClosedXML
             return GenerateCsvReport(claims, reportType);
         }
-    
+
+
+        // GET: /Admin/UserList
+        public async Task<IActionResult> UserList()
+        {
+            try
+            {
+                var users = await _context.Users
+                    .OrderByDescending(u => u.CreatedDate)
+                    .ToListAsync();
+                return View(users);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading user list");
+                TempData["ErrorMessage"] = "Error loading user data.";
+                return View(new List<User>());
+            }
+        }
+
+        // GET: /Admin/ViewUser/{id}
+        public async Task<IActionResult> ViewUser(int id)
+        {
+            try
+            {
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Id == id);  // Changed to u.Id
+
+                if (user == null)
+                {
+                    TempData["ErrorMessage"] = "User not found.";
+                    return RedirectToAction(nameof(UserList));
+                }
+
+                // Load related entity data based on user type
+                if (user.LecturerId.HasValue)
+                {
+                    var lecturer = await _context.Lecturers
+                        .FirstOrDefaultAsync(l => l.LecturerId == user.LecturerId.Value);
+                    ViewBag.Lecturer = lecturer;
+                }
+                else if (user.CoordinatorId.HasValue)
+                {
+                    var coordinator = await _context.ProgrammeCoordinators
+                        .FirstOrDefaultAsync(pc => pc.CoordinatorId == user.CoordinatorId.Value);
+                    ViewBag.Coordinator = coordinator;
+                }
+                else if (user.ManagerId.HasValue)
+                {
+                    var manager = await _context.AcademicManagers
+                        .FirstOrDefaultAsync(am => am.ManagerId == user.ManagerId.Value);
+                    ViewBag.Manager = manager;
+                }
+
+                return View(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading user details for user {UserId}", id);
+                TempData["ErrorMessage"] = "Error loading user details.";
+                return RedirectToAction(nameof(UserList));
+            }
+        }
+
+        // GET: /Admin/EditUser/{id}
+        public async Task<IActionResult> EditUser(int id)
+        {
+            try
+            {
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Id == id);  
+
+                if (user == null)
+                {
+                    TempData["ErrorMessage"] = "User not found.";
+                    return RedirectToAction(nameof(UserList));
+                }
+
+                var model = new EditUserViewModel
+                {
+                    Id = user.Id,  
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    UserType = user.User_Type,
+                    IsActive = 1 // Default to active since IsActive is commented out in User class
+                };
+
+                // Load entity-specific data
+                switch (user.User_Type)
+                {
+                    case User_Type.Lecturer:
+                        var lecturer = await _context.Lecturers
+                            .FirstOrDefaultAsync(l => l.LecturerId == user.LecturerId.Value);
+                        if (lecturer != null)
+                        {
+                            model.PhoneNumber = lecturer.PhoneNumber;
+                            model.HourlyRate = lecturer.HourlyRate;
+                            model.ContractStartDate = lecturer.ContractStartDate;
+                            model.ContractEndDate = lecturer.ContractEndDate;
+                            model.IsActive = lecturer.IsActive;
+                        }
+                        break;
+
+                    case User_Type.ProgrammeCoordinator:
+                        var coordinator = await _context.ProgrammeCoordinators
+                            .FirstOrDefaultAsync(pc => pc.CoordinatorId == user.CoordinatorId.Value);
+                        if (coordinator != null)
+                        {
+                            model.Department = coordinator.Department;
+                            model.IsActive = coordinator.IsActive;
+                        }
+                        break;
+
+                    case User_Type.AcademicManager:
+                        var manager = await _context.AcademicManagers
+                            .FirstOrDefaultAsync(am => am.ManagerId == user.ManagerId.Value);
+                        if (manager != null)
+                        {
+                            model.IsActive = manager.IsActive;
+                        }
+                        break;
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading edit user form for user {UserId}", id);
+                TempData["ErrorMessage"] = "Error loading edit form.";
+                return RedirectToAction(nameof(UserList));
+            }
+        }
+
+        // POST: /Admin/EditUser
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Id == model.Id);  // Changed to u.Id
+
+                if (user == null)
+                {
+                    TempData["ErrorMessage"] = "User not found.";
+                    return RedirectToAction(nameof(UserList));
+                }
+
+                // Update user basic info
+                user.FirstName = model.FirstName?.Trim();
+                user.LastName = model.LastName?.Trim();
+                user.Email = model.Email?.Trim();
+                user.NormalizedEmail = model.Email?.Trim().ToUpperInvariant();
+                user.UserName = model.Email?.Trim();
+                user.NormalizedUserName = model.Email?.Trim().ToUpperInvariant();
+                // Note: IsActive is commented out in User class, so we don't set it here
+
+                // Update entity-specific data
+                switch (user.User_Type)
+                {
+                    case User_Type.Lecturer:
+                        var lecturer = await _context.Lecturers
+                            .FirstOrDefaultAsync(l => l.LecturerId == user.LecturerId.Value);
+                        if (lecturer != null)
+                        {
+                            lecturer.FirstName = model.FirstName?.Trim();
+                            lecturer.LastName = model.LastName?.Trim();
+                            lecturer.Email = model.Email?.Trim();
+                            lecturer.PhoneNumber = model.PhoneNumber;
+                            lecturer.HourlyRate = model.HourlyRate;
+                            lecturer.ContractStartDate = model.ContractStartDate ?? lecturer.ContractStartDate;
+                            lecturer.ContractEndDate = model.ContractEndDate;
+                            lecturer.IsActive = model.IsActive;
+                        }
+                        break;
+
+                    case User_Type.ProgrammeCoordinator:
+                        var coordinator = await _context.ProgrammeCoordinators
+                            .FirstOrDefaultAsync(pc => pc.CoordinatorId == user.CoordinatorId.Value);
+                        if (coordinator != null)
+                        {
+                            coordinator.FirstName = model.FirstName?.Trim();
+                            coordinator.LastName = model.LastName?.Trim();
+                            coordinator.Email = model.Email?.Trim();
+                            coordinator.Department = model.Department;
+                            coordinator.IsActive = model.IsActive;
+                        }
+                        break;
+
+                    case User_Type.AcademicManager:
+                        var manager = await _context.AcademicManagers
+                            .FirstOrDefaultAsync(am => am.ManagerId == user.ManagerId.Value);
+                        if (manager != null)
+                        {
+                            manager.FirstName = model.FirstName?.Trim();
+                            manager.LastName = model.LastName?.Trim();
+                            manager.Email = model.Email?.Trim();
+                            manager.IsActive = model.IsActive;
+                        }
+                        break;
+                }
+
+                // Update password if provided
+                if (!string.IsNullOrEmpty(model.NewPassword))
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+
+                    if (!result.Succeeded)
+                    {
+                        _logger.LogWarning("Failed to reset password for user {UserId}. Errors: {Errors}",
+                            model.Id, string.Join(", ", result.Errors.Select(e => e.Description)));
+                        TempData["WarningMessage"] = "User updated but password reset failed.";
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User {UserId} updated successfully", model.Id);
+                TempData["SuccessMessage"] = "User updated successfully.";
+
+                return RedirectToAction(nameof(ViewUser), new { id = model.Id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating user {UserId}", model.Id);
+                ModelState.AddModelError("", "An error occurred while updating the user. Please try again.");
+                return View(model);
+            }
+        }
+
+        // POST: /Admin/DeleteUser
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Id == id);  // Changed to u.Id
+
+                if (user == null)
+                {
+                    TempData["ErrorMessage"] = "User not found.";
+                    return RedirectToAction(nameof(UserList));
+                }
+
+                // Prevent deletion of Administrators
+                if (user.User_Type == User_Type.Administrator)
+                {
+                    TempData["ErrorMessage"] = "Administrator users cannot be deleted.";
+                    return RedirectToAction(nameof(UserList));
+                }
+
+                string userName = user.FullName;
+
+                // Delete the associated entity first
+                switch (user.User_Type)
+                {
+                    case User_Type.Lecturer:
+                        var lecturer = await _context.Lecturers
+                            .FirstOrDefaultAsync(l => l.LecturerId == user.LecturerId.Value);
+                        if (lecturer != null)
+                        {
+                            _context.Lecturers.Remove(lecturer);
+                        }
+                        break;
+
+                    case User_Type.ProgrammeCoordinator:
+                        var coordinator = await _context.ProgrammeCoordinators
+                            .FirstOrDefaultAsync(pc => pc.CoordinatorId == user.CoordinatorId.Value);
+                        if (coordinator != null)
+                        {
+                            _context.ProgrammeCoordinators.Remove(coordinator);
+                        }
+                        break;
+
+                    case User_Type.AcademicManager:
+                        var manager = await _context.AcademicManagers
+                            .FirstOrDefaultAsync(am => am.ManagerId == user.ManagerId.Value);
+                        if (manager != null)
+                        {
+                            _context.AcademicManagers.Remove(manager);
+                        }
+                        break;
+                }
+
+                // Delete the user account
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User {UserId} ({UserName}) deleted successfully", id, userName);
+                TempData["SuccessMessage"] = $"User {userName} deleted successfully.";
+
+                return RedirectToAction(nameof(UserList));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting user {UserId}", id);
+                TempData["ErrorMessage"] = "An error occurred while deleting the user. Please try again.";
+                return RedirectToAction(nameof(UserList));
+            }
+        }
+
     }
 }
