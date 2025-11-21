@@ -652,7 +652,7 @@ CREATE TABLE ROLES (
     "Id" NUMBER(10) PRIMARY KEY,
     "Name" NVARCHAR2(256),
     "NormalizedName" NVARCHAR2(256),
-    "ConcurrencyStamp" NCLOB
+    "ConcurrencyStamp" NVARCHAR2(256)
 );
 
 CREATE TABLE USERS (
@@ -661,16 +661,16 @@ CREATE TABLE USERS (
     "NormalizedUserName" NVARCHAR2(256),
     "Email" NVARCHAR2(256),
     "NormalizedEmail" NVARCHAR2(256),
-    "EmailConfirmed" NUMBER(1) NOT NULL,
-    "PasswordHash" NCLOB,
-    "SecurityStamp" NCLOB,
-    "ConcurrencyStamp" NCLOB,
-    "PhoneNumber" NCLOB,
-    "PhoneNumberConfirmed" NUMBER(1) NOT NULL,
-    "TwoFactorEnabled" NUMBER(1) NOT NULL,
+    "EmailConfirmed" NUMBER(1) DEFAULT 1 NOT NULL,
+    "PasswordHash" NVARCHAR2(2000),
+    "SecurityStamp" NVARCHAR2(2000),
+    "ConcurrencyStamp" NVARCHAR2(200),
+    "PhoneNumber" NVARCHAR2(15),
+    "PhoneNumberConfirmed" NUMBER(1) DEFAULT 0 NOT NULL,
+    "TwoFactorEnabled" NUMBER(1) DEFAULT 0 NOT NULL,
     "LockoutEnd" TIMESTAMP WITH TIME ZONE,
-    "LockoutEnabled" NUMBER(1) NOT NULL,
-    "AccessFailedCount" NUMBER(10) NOT NULL,
+    "LockoutEnabled" NUMBER(1) DEFAULT 1 NOT NULL,
+    "AccessFailedCount" NUMBER(10) DEFAULT 0 NOT NULL,
     "FirstName" NVARCHAR2(100) NOT NULL,
     "LastName" NVARCHAR2(100) NOT NULL,
     "User_Type" NUMBER(10) NOT NULL,
@@ -690,14 +690,14 @@ CREATE TABLE USER_ROLES (
 CREATE TABLE USER_CLAIMS (
     "Id" NUMBER(10) PRIMARY KEY,
     "UserId" NUMBER(10) NOT NULL,
-    "ClaimType" NCLOB,
-    "ClaimValue" NCLOB
+    "ClaimType" NVARCHAR2(256),
+    "ClaimValue" NVARCHAR2(256)
 );
 
 CREATE TABLE USER_LOGINS (
     "LoginProvider" NVARCHAR2(128) NOT NULL,
     "ProviderKey" NVARCHAR2(128) NOT NULL,
-    "ProviderDisplayName" NCLOB,
+    "ProviderDisplayName" NVARCHAR2(256),
     "UserId" NUMBER(10) NOT NULL,
     PRIMARY KEY ("LoginProvider", "ProviderKey")
 );
@@ -706,15 +706,15 @@ CREATE TABLE USER_TOKENS (
     "UserId" NUMBER(10) NOT NULL,
     "LoginProvider" NVARCHAR2(128) NOT NULL,
     "Name" NVARCHAR2(128) NOT NULL,
-    "Value" NCLOB,
+    "Value" NVARCHAR2(256),
     PRIMARY KEY ("UserId", "LoginProvider", "Name")
 );
 
 CREATE TABLE ROLE_CLAIMS (
     "Id" NUMBER(10) PRIMARY KEY,
     "RoleId" NUMBER(10) NOT NULL,
-    "ClaimType" NCLOB,
-    "ClaimValue" NCLOB
+    "ClaimType" NVARCHAR2(256),
+    "ClaimValue" NVARCHAR2(256)
 );
 
 -- Create Application Tables
@@ -723,7 +723,6 @@ CREATE TABLE LECTURERS (
     FirstName NVARCHAR2(100) NOT NULL,
     LastName NVARCHAR2(100) NOT NULL,
     Email NVARCHAR2(256) NOT NULL,
-    EmployeeNumber NVARCHAR2(20) NOT NULL,
     PhoneNumber NVARCHAR2(15),
     HourlyRate NUMBER(10,2),
     ContractStartDate TIMESTAMP,
@@ -796,7 +795,6 @@ CREATE TABLE SUPPORTING_DOCUMENTS (
 
 -- Create Indexes
 CREATE UNIQUE INDEX IX_LECTURERS_EMAIL ON LECTURERS(Email);
-CREATE UNIQUE INDEX IX_LECTURERS_EMP_NUM ON LECTURERS(EmployeeNumber);
 
 CREATE UNIQUE INDEX IX_COORDINATORS_EMAIL ON PROGRAMME_COORDINATORS(EMAIL);
 
@@ -908,17 +906,19 @@ END;
 
 --INSERT
 -- Insert roles into ROLES table
-INSERT INTO ROLES ("Id", "Name", "NormalizedName", "ConcurrencyStamp") VALUES
-(SEQ_ROLES.NEXTVAL, 'Administrator', 'ADMINISTRATOR', 'CONCSTAMP_ROLE_001');
 
 INSERT INTO ROLES ("Id", "Name", "NormalizedName", "ConcurrencyStamp") VALUES
-(SEQ_ROLES.NEXTVAL, 'Lecturer', 'LECTURER', 'CONCSTAMP_ROLE_002');
+(SEQ_ROLES.NEXTVAL, 'Lecturer', 'LECTURER', 'CONCSTAMP_ROLE_001');
 
 INSERT INTO ROLES ("Id", "Name", "NormalizedName", "ConcurrencyStamp") VALUES
-(SEQ_ROLES.NEXTVAL, 'Coordinator', 'COORDINATOR', 'CONCSTAMP_ROLE_003');
+(SEQ_ROLES.NEXTVAL, 'ProgrammeCoordinator', 'PROGRAMMECOORDINATOR', 'CONCSTAMP_ROLE_002');
 
 INSERT INTO ROLES ("Id", "Name", "NormalizedName", "ConcurrencyStamp") VALUES
-(SEQ_ROLES.NEXTVAL, 'Manager', 'MANAGER', 'CONCSTAMP_ROLE_004');
+(SEQ_ROLES.NEXTVAL, 'AcademicManager', 'ACADEMICMANAGER', 'CONCSTAMP_ROLE_003');
+
+INSERT INTO ROLES ("Id", "Name", "NormalizedName", "ConcurrencyStamp") VALUES
+(SEQ_ROLES.NEXTVAL, 'HR', 'HR', 'CONCSTAMP_ROLE_004');
+
 
 COMMIT;
 --insert the base records in the specific tables
@@ -929,8 +929,8 @@ INSERT INTO PROGRAMME_COORDINATORS (COORDINATOR_ID, FIRST_NAME, LAST_NAME, EMAIL
 VALUES (SEQ_PROGRAMME_COORDINATORS.NEXTVAL, 'Sarah', 'Coordinator', 'sarah.coordinator@university.edu', 'Computer Science', 1);
 
 -- Corrected INSERT for LECTURERS
-INSERT INTO LECTURERS (LECTURERID, FIRSTNAME, LASTNAME, EMAIL, EMPLOYEENUMBER, PHONENUMBER, HOURLYRATE, CONTRACTSTARTDATE, CONTRACTENDDATE, ISACTIVE) 
-VALUES (SEQ_LECTURERS.NEXTVAL, 'David', 'Lecturer', 'david.lecturer@university.edu', 'EMP001', '+1234567890', 75.50, SYSDATE, NULL, 1);
+INSERT INTO LECTURERS (LECTURERID, FIRSTNAME, LASTNAME, EMAIL, PHONENUMBER, HOURLYRATE, CONTRACTSTARTDATE, CONTRACTENDDATE, ISACTIVE) 
+VALUES (SEQ_LECTURERS.NEXTVAL, 'David', 'Lecturer', 'david.lecturer@university.edu', '+1234567890', 75.50, SYSDATE, NULL, 1);
 
 -- insert the user accounts with correct Identity column names
 INSERT INTO USERS (
@@ -1042,16 +1042,16 @@ INSERT INTO USERS (
     1,
     0,
     'System',
-    'Administrator',
+    'HR',
     4,
     SYSDATE,
     1
 );
 
 -- Assign roles to users (make sure roles exist first)
-INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (1, 4); -- John Manager -> Administrator
-INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (2, 3); -- Sarah Coordinator -> Coordinator  
-INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (3, 2); -- David Lecturer -> Lecturer
-INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (4, 1); -- Admin -> Administrator
+INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (1, 3); -- John Manager -> Administrator
+INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (2, 2); -- Sarah Coordinator -> Coordinator  
+INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (3, 1); -- David Lecturer -> Lecturer
+INSERT INTO USER_ROLES ("UserId", "RoleId") VALUES (4, 4); -- Admin -> Administrator
 
 COMMIT;
