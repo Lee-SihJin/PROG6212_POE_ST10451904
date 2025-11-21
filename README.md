@@ -1,4 +1,5 @@
 # PROG6212_POE_ST10451904
+# Youtube Link: https://youtu.be/E8UgsmfllS0
 # Contract Monthly Claim System (CMCS)
 
 A comprehensive ASP.NET Core web application for managing monthly contract claims in an academic environment. This system facilitates the submission, review, and approval process for contract lecturers' monthly claims through a role-based workflow.
