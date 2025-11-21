@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContractMonthlyClaimSystem.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "HR")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -77,7 +77,7 @@ namespace ContractMonthlyClaimSystem.Controllers
             {
                 UserTypes = Enum.GetValues(typeof(User_Type))
                                .Cast<User_Type>()
-                               .Where(ut => ut != User_Type.Administrator) // Exclude Administrator from creation
+                               .Where(ut => ut != User_Type.HR) // Exclude Administrator from creation
                                .Select(ut => new SelectListItem
                                {
                                    Value = ((int)ut).ToString(),
@@ -97,7 +97,7 @@ namespace ContractMonthlyClaimSystem.Controllers
                 // Repopulate UserTypes for the dropdown
                 model.UserTypes = Enum.GetValues(typeof(User_Type))
                                    .Cast<User_Type>()
-                                   .Where(ut => ut != User_Type.Administrator)
+                                   .Where(ut => ut != User_Type.HR)
                                    .Select(ut => new SelectListItem
                                    {
                                        Value = ((int)ut).ToString(),
@@ -114,7 +114,7 @@ namespace ContractMonthlyClaimSystem.Controllers
                     ModelState.AddModelError("Email", "Email address already exists.");
                     model.UserTypes = Enum.GetValues(typeof(User_Type))
                                        .Cast<User_Type>()
-                                       .Where(ut => ut != User_Type.Administrator)
+                                       .Where(ut => ut != User_Type.HR)
                                        .Select(ut => new SelectListItem
                                        {
                                            Value = ((int)ut).ToString(),
@@ -183,7 +183,7 @@ namespace ContractMonthlyClaimSystem.Controllers
                         ModelState.AddModelError("UserType", "Invalid user type selected.");
                         model.UserTypes = Enum.GetValues(typeof(User_Type))
                                            .Cast<User_Type>()
-                                           .Where(ut => ut != User_Type.Administrator)
+                                           .Where(ut => ut != User_Type.HR)
                                            .Select(ut => new SelectListItem
                                            {
                                                Value = ((int)ut).ToString(),
@@ -263,7 +263,7 @@ namespace ContractMonthlyClaimSystem.Controllers
                 // Repopulate UserTypes for the dropdown
                 model.UserTypes = Enum.GetValues(typeof(User_Type))
                                    .Cast<User_Type>()
-                                   .Where(ut => ut != User_Type.Administrator)
+                                   .Where(ut => ut != User_Type.HR)
                                    .Select(ut => new SelectListItem
                                    {
                                        Value = ((int)ut).ToString(),
@@ -792,9 +792,9 @@ public async Task<IActionResult> Reports()
                 }
 
                 // Prevent deletion of Administrators
-                if (user.User_Type == User_Type.Administrator)
+                if (user.User_Type == User_Type.HR)
                 {
-                    TempData["ErrorMessage"] = "Administrator users cannot be deleted.";
+                    TempData["ErrorMessage"] = "HR users cannot be deleted.";
                     return RedirectToAction(nameof(UserList));
                 }
 

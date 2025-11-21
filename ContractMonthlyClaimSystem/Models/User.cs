@@ -44,6 +44,6 @@ namespace ContractMonthlyClaimSystem.Models
         Lecturer = 1,
         ProgrammeCoordinator = 2,
         AcademicManager = 3,
-        Administrator = 4
+        HR = 4
     }
 }

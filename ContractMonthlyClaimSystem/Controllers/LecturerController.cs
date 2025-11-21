@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContractMonthlyClaimSystem.Controllers
 {
-    [Authorize(Roles = "Lecturer,Administrator")]
+    [Authorize(Roles = "Lecturer,HR")]
     public class LecturerController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -35,7 +35,7 @@ namespace ContractMonthlyClaimSystem.Controllers
 
                 if (currentUser?.Lecturer == null)
                 {
-                    TempData["Error"] = "Lecturer profile not found. Please contact administrator.";
+                    TempData["Error"] = "Lecturer profile not found. Please contact HR.";
                     return View(new LecturerDashboardViewModel());
                 }
 
@@ -192,7 +192,7 @@ namespace ContractMonthlyClaimSystem.Controllers
                     .Include(u => u.Lecturer)
                     .FirstOrDefaultAsync(u => u.Id.ToString() == currentUserId);
 
-                if (currentUser?.Lecturer?.LecturerId != claim.LecturerId && !User.IsInRole("Administrator"))
+                if (currentUser?.Lecturer?.LecturerId != claim.LecturerId && !User.IsInRole("HR"))
                 {
                     TempData["Error"] = "Access denied.";
                     return RedirectToAction(nameof(Index));

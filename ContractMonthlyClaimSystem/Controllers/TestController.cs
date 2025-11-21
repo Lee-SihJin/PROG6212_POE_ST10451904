@@ -100,7 +100,7 @@ namespace ContractMonthlyClaimSystem.Controllers
                         "Lecturer" => User_Type.Lecturer,
                         "ProgrammeCoordinator" => User_Type.ProgrammeCoordinator,
                         "AcademicManager" => User_Type.AcademicManager,
-                        _ => User_Type.Administrator
+                        _ => User_Type.HR
                     },
                     EmailConfirmed = true,
                     //IsActive = 1

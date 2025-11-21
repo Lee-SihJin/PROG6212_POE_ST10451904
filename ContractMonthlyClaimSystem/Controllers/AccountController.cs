@@ -105,7 +105,7 @@ namespace ContractMonthlyClaimSystem.Controllers
 
         private async Task<IActionResult> RedirectToRolePage(User user, string returnUrl)
         {
-            if (await _userManager.IsInRoleAsync(user, "Administrator"))
+            if (await _userManager.IsInRoleAsync(user, "HR"))
             {
                 return RedirectToAction("Index", "Admin");
             }

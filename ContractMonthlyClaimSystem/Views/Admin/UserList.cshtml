@@ -61,7 +61,7 @@
                                     <td>
                                         @switch (user.User_Type)
                                         {
-                                            case User_Type.Administrator:
+                                            case User_Type.HR:
                                                 <span>@user.User_Type</span>
                                                 break;
                                             case User_Type.Lecturer:
@@ -97,7 +97,7 @@
                                             </a>
 
                                             <!-- Delete Button - MAKE SURE THIS HAS THE CORRECT CLASS -->
-                                            @if (user.User_Type != User_Type.Administrator)
+                                            @if (user.User_Type != User_Type.HR)
                                             {
                                                 <button type="button"
                                                         class="btn btn-danger btn-sm delete-user-btn"
@@ -112,7 +112,7 @@
                                                 <button type="button"
                                                         class="btn btn-danger btn-sm"
                                                         disabled
-                                                        title="Administrators cannot be deleted">
+                                                        title="HRs cannot be deleted">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             }
@@ -281,6 +281,4 @@
             console.log('Delete form found:', !!document.getElementById('deleteUserForm'));
         });
     </script>
-}
-}
 }
